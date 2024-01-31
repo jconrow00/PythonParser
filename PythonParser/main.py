@@ -75,11 +75,6 @@ def main():
         sentiment_result = sentiment_pipe(word)
         for i in range(3):
             print(f"\tSentiment: \t{sentiment_result[0][i]['label']} \n\tScore: \t\t{sentiment_result[0][i]['score'] * 100}")
-        ##print(analyze_sentiment(word))
-        ##sentiment_label, sentiment_score = analyze_sentiment(word)
-        ##print(f"Word: {word}, Sentiment: {sentiment_label}, Score: {sentiment_score}")
-        #for out in sentiment_pipe:
-        #    print(out)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

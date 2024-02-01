@@ -3,6 +3,7 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import torch
+import decimal
 from transformers import pipeline, DistilBertTokenizer, DistilBertForSequenceClassification, TextClassificationPipeline
 
 model_id = "lxyuan/distilbert-base-multilingual-cased-sentiments-student"
@@ -59,8 +60,6 @@ def main():
     # setup a pipeline model
     sentiment_pipe = pipeline("sentiment-analysis", model=model_id, top_k=None)
 
-    print(sentiment_pipe("test")) # TEMP
-
     # recieve text from user
     input_text = input("Enter a sentence or phrase: ")
     words = input_text.split()
@@ -68,13 +67,16 @@ def main():
     # print out results of pipeline
 
     for word in words:
-        pass
-
-    for word in words:
         print(f"Word: {word}")
         sentiment_result = sentiment_pipe(word)
         for i in range(3):
-            print(f"\tSentiment: \t{sentiment_result[0][i]['label']} \n\tScore: \t\t{sentiment_result[0][i]['score'] * 100}")
+            print(f"\tSentiment: \t{sentiment_result[0][i]['label']}\n"
+                  f"\tScore: \t\t{round(sentiment_result[0][i]['score'] * 100,2)}%")
+        ##print(analyze_sentiment(word))
+        ##sentiment_label, sentiment_score = analyze_sentiment(word)
+        ##print(f"Word: {word}, Sentiment: {sentiment_label}, Score: {sentiment_score}")
+        #for out in sentiment_pipe:
+        #    print(out)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

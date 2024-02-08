@@ -1,2 +1,4 @@
 1) Hello #wave my name is Pepper #stop Wait
 2) 4 #people #test
+1) #you #should quit $ before this
+2) #looksdown

@@ -27,12 +27,15 @@ class ScriptLine:
         self.gestures = gestures
 
     def __str__(self):
-        string = f"Voice: {self.voice} | Text: \"{self.text}\" | Gesture: "
+        string = (f"\033[91mVoice: {self.voice} "
+                  f"\033[0m| \033[92mText: \"{self.text}\" "
+                  f"\033[0m| \033[93mGestures: ")
         for i in range(len(self.gestures)):
             if i < len(self.gestures) - 1:
                 string += f"{self.gestures[i]}, "
             else:
                 string += f"{self.gestures[i]}"
+        #string += f"\033[0m"
         return string
 
 class Node:
@@ -98,6 +101,8 @@ def extract_gesture(line):
         line = gestures[i]
         # removes all after the gesture
         gestures[i] = gestures[i].partition(' ')[0]
+        gestures[i] = gestures[i].rstrip('\n ')
+        gestures[i] = gestures[i].lstrip('\n ')
     return gestures
 
 
@@ -148,20 +153,11 @@ def main():
             line_number = fileinput.lineno()
             # returns a str array of gestures
 
-            gestures = extract_gesture(line)
-            text = extract_text(line)
             voice = extract_voice(line)
+            text = extract_text(line)
+            gestures = extract_gesture(line)
             testing_class = ScriptLine(voice, text, gestures)
             print(testing_class)
-
-"""         #TESTING print
-            print(f"\t{line_number}\t", end='')
-            for i in range(len(gestures)):
-                print(f"{gestures[i]}", end='')
-                if i < len(gestures) - 1:
-                    print(f", ", end='')
-            print(f" ")
-"""
 
 
 # Press the green button in the gutter to run the script.

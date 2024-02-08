@@ -1,10 +1,15 @@
 # This is a sample Python script.
+import fileinput
 
-# Press Shift+F10 to execute it or replace it with your code.
+# Press Shiffor line in fileinput.input(encoding="utf-8"):
+# t+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import torch
 import decimal
+import fileinput
 from transformers import pipeline, DistilBertTokenizer, DistilBertForSequenceClassification, TextClassificationPipeline
+
+
 
 model_id = "lxyuan/distilbert-base-multilingual-cased-sentiments-student"
 
@@ -47,36 +52,58 @@ def create_linked_list(input_string):
     return linked_list
 
 
+def check_speed(line_number, line):
+    # extracts the speed number (1-5) before the '#'
+    line_speed = line.partition('#')[0]
+    # checks if the speed number is valid, else error
+    if not line_speed.isdigit():
+        print(f"\033[1:91mIn Script line({line_number}): speed (prior to '#') is snot a positive integer\033[0m")
+        exit(1)
+    else:
+        line_speed = int(line_speed)
+    if line_speed < 1 or line_speed > 5:
+        print(f"\033[1:91mIn Script line({line_number}): speed out of range: {line_speed}\033[0m")
+        exit(1)
+    return line_speed
+
+# RETURNS an array of gestures in the form: BLAH #gesture1 BLAH #gesture2 BLAH -> arr = [gesture1, gesture 2]
+def extract_gesture(line):
+    gesture_count = line.count()
+    gestures = [0 for x in gesture_count]
+    for i in gesture_count:
+        # removes all to the left of the first '#'
+        gestures[i] = line.partition('#')[2]
+        # copies the removal to the running line string
+        line = gestures[i]
+        gestures[i] = gestures[i].partition(' ')[0]
+    return line.partition(' ')[0]
+
+
+def print_line_sentiments(line_number, sentiment_file_results):
+    # prints out these line-sentiments
+    for i in range(3):
+        current_sentiment_label = sentiment_file_results[line_number][0][i]['label'].upper()
+        # labels the color to the sentiment
+        if current_sentiment_label == 'POSITIVE':
+            print(f"\033[92m", end='')
+        elif current_sentiment_label == 'NEGATIVE':
+            print(f"\033[91m", end='')
+        elif current_sentiment_label == 'NEUTRAL':
+            print(f"\033[93m", end='')
+        print(f"\t{current_sentiment_label}", end='')
+        print(f"\033[0m \t{round(sentiment_file_results[line_number][0][i]['score'] * 100, 2)}%")
+    return
+
 def main():
-    # The following block is for linked list parsing
-    """
-    input_string = input("Enter a string of words: ")
-    word_linked_list = create_linked_list(input_string)
-    print("Linked List:")
-    word_linked_list.print()
-    """
+    # receive text input from script file
+    with fileinput.input(files='InputScript.txt') as input_script:
+        sentiment_file_results = [6653]
+        # goes through each line of file
+        for line in input_script:
+            line_number = fileinput.lineno()
+            gesture = extract_gesture(line)
 
-    # The following block is for sentiment analysis
-    # setup a pipeline model
-    sentiment_pipe = pipeline("sentiment-analysis", model=model_id, top_k=None)
 
-    # recieve text from user
-    input_text = input("Enter a sentence or phrase: ")
-    words = input_text.split()
-
-    # print out results of pipeline
-
-    for word in words:
-        print(f"Word: {word}")
-        sentiment_result = sentiment_pipe(word)
-        for i in range(3):
-            print(f"\tSentiment: \t{sentiment_result[0][i]['label']}\n"
-                  f"\tScore: \t\t{round(sentiment_result[0][i]['score'] * 100,2)}%")
-        ##print(analyze_sentiment(word))
-        ##sentiment_label, sentiment_score = analyze_sentiment(word)
-        ##print(f"Word: {word}, Sentiment: {sentiment_label}, Score: {sentiment_score}")
-        #for out in sentiment_pipe:
-        #    print(out)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

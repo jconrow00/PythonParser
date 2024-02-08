@@ -20,6 +20,21 @@ def analyze_sentiment(text):
     return result[0]['label'], result[0]['score']
 
 
+class ScriptLine:
+    def __init__(self, voice=-1, text=None, gestures=[]):
+        self.voice = voice
+        self.text = text
+        self.gestures = gestures
+
+    def __str__(self):
+        string = f"Voice: {self.voice} | Text: \"{self.text}\" | Gesture: "
+        for i in range(len(self.gestures)):
+            if i < len(self.gestures) - 1:
+                string += f"{self.gestures[i]}, "
+            else:
+                string += f"{self.gestures[i]}"
+        return string
+
 class Node:
     def __init__(self, data):
         self.data = data
@@ -66,17 +81,42 @@ def check_speed(line_number, line):
         exit(1)
     return line_speed
 
+
+# RETURNS an int of the voice
+def extract_voice(line):
+    return line.partition(')')[0]
+
+
 # RETURNS an array of gestures in the form: BLAH #gesture1 BLAH #gesture2 BLAH -> arr = [gesture1, gesture 2]
 def extract_gesture(line):
-    gesture_count = line.count()
-    gestures = [0 for x in gesture_count]
-    for i in gesture_count:
+    gesture_count = line.count('#')
+    gestures = [''] * gesture_count
+    for i in range(gesture_count):
         # removes all to the left of the first '#'
         gestures[i] = line.partition('#')[2]
         # copies the removal to the running line string
         line = gestures[i]
+        # removes all after the gesture
         gestures[i] = gestures[i].partition(' ')[0]
-    return line.partition(' ')[0]
+    return gestures
+
+
+def extract_text(line):
+    # get rid of the "person" syntax
+    line = line.partition(')')[2]
+    gesture_count = line.count('#')
+    # initialize empty line to build
+    text = ""
+    for i in range(gesture_count + 1):
+        # adds the text to the left of the leftmost gesture
+        text += line.partition('#')[0]
+        # updates the running line to remove up to the leftmost gesture
+        line = line.partition('#')[2]
+        # updates the running line to remove the leftmost gesture
+        line = line.partition(' ')[2]
+    text = text.rstrip('\n ')
+    text = text.lstrip('\n ')
+    return text
 
 
 def print_line_sentiments(line_number, sentiment_file_results):
@@ -94,15 +134,34 @@ def print_line_sentiments(line_number, sentiment_file_results):
         print(f"\033[0m \t{round(sentiment_file_results[line_number][0][i]['score'] * 100, 2)}%")
     return
 
+
 def main():
     # receive text input from script file
     with fileinput.input(files='InputScript.txt') as input_script:
-        sentiment_file_results = [6653]
+        with open(r"InputScript.txt", 'r') as fp:
+            lines = len(fp.readlines())
+        line_results = [lines]
+
+
         # goes through each line of file
         for line in input_script:
             line_number = fileinput.lineno()
-            gesture = extract_gesture(line)
+            # returns a str array of gestures
 
+            gestures = extract_gesture(line)
+            text = extract_text(line)
+            voice = extract_voice(line)
+            testing_class = ScriptLine(voice, text, gestures)
+            print(testing_class)
+
+"""         #TESTING print
+            print(f"\t{line_number}\t", end='')
+            for i in range(len(gestures)):
+                print(f"{gestures[i]}", end='')
+                if i < len(gestures) - 1:
+                    print(f", ", end='')
+            print(f" ")
+"""
 
 
 # Press the green button in the gutter to run the script.

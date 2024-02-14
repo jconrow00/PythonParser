@@ -7,6 +7,7 @@ import fileinput
 import torch
 import decimal
 import fileinput
+import csv
 from transformers import pipeline, DistilBertTokenizer, DistilBertForSequenceClassification, TextClassificationPipeline
 
 
@@ -37,6 +38,18 @@ class ScriptLine:
                 string += f"{self.gestures[i]}"
         #string += f"\033[0m"
         return string
+
+    def help_csv(self):
+        array = []
+        array.append(f"{self.voice}")
+        array.append(f"{self.text}")
+        for i in range(len(self.gestures)):
+            array.append(f"{self.gestures[i]}")
+        return array
+    def append_to_csv(self,filename):
+        with open(filename, 'a') as f:
+            writer = csv.writer(f)
+            writer.writerow(self.help_csv())
 
 class Node:
     def __init__(self, data):
@@ -158,7 +171,7 @@ def main():
             gestures = extract_gesture(line)
             testing_class = ScriptLine(voice, text, gestures)
             print(testing_class)
-
+            testing_class.append_to_csv(    "OutputScript.csv")
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

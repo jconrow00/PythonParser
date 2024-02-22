@@ -5,6 +5,11 @@ import decimal
 import fileinput
 import csv
 import naoqi
+
+import qi
+import sys
+import time
+
 from contextlib import closing
 
 # Press Shiffor line in fileinput.input(encoding="utf-8"):
@@ -51,6 +56,93 @@ class ScriptLine:
         with open(filename, 'a') as f:
             writer = csv.writer(f)
             writer.writerow(self.help_csv())
+
+
+def run_behavior(ip, port, behavior_name):
+    session = qi.Session()
+    try:
+        session.connect("tcp://" + ip + ":" + str(port))
+    except RuntimeError:
+        print ("Can't connect to Naoqi at ip \"" + ip + "\" on port " + str(port) +".\n"
+               "Please check your script arguments. Run with -h option for help.")
+        sys.exit(1)
+
+    behavior_mng_service = session.service("ALBehaviorManager")
+    getBehaviors(behavior_mng_service)
+    launchAndStopBehavior(behavior_mng_service, behavior_name)
+    defaultBehaviors(behavior_mng_service, behavior_name)
+
+
+def getBehaviors(behavior_mng_service):
+    """
+    Know which behaviors are on the robot.
+    """
+
+    names = behavior_mng_service.getInstalledBehaviors()
+    print ("Behaviors on the robot:")
+    print (names)
+
+    names = behavior_mng_service.getRunningBehaviors()
+    print ("Running behaviors:")
+    print (names)
+
+def launchAndStopBehavior(behavior_mng_service, behavior_name):
+    """
+    Launch and stop a behavior, if possible.
+    """
+    # Check that the behavior exists.
+    if behavior_mng_service.isBehaviorInstalled(behavior_name):
+        # Check that it is not already running.
+        if not behavior_mng_service.isBehaviorRunning(behavior_name):
+            # Launch behavior. This is a blocking call, use _async=True if you do not
+            # want to wait for the behavior to finish.
+            behavior_mng_service.runBehavior(behavior_name, _async=True)
+            time.sleep(0.5)
+        else:
+            print ("Behavior is already running.")
+
+    else:
+        print ("Behavior not found.")
+    return
+
+    names = behavior_mng_service.getRunningBehaviors()
+    print ("Running behaviors:")
+    print (names)
+
+    # Stop the behavior.
+    if behavior_mng_service.isBehaviorRunning(behavior_name):
+        behavior_mng_service.stopBehavior(behavior_name)
+        time.sleep(1.0)
+    else:
+        print ("Behavior is already stopped.")
+
+    names = behavior_mng_service.getRunningBehaviors()
+    print ("Running behaviors:")
+    print (names)
+
+def defaultBehaviors(behavior_mng_service, behavior_name):
+    """
+    Set a behavior as default and remove it from default behavior.
+    """
+
+    # Get default behaviors.
+    names = behavior_mng_service.getDefaultBehaviors()
+    print ("Default behaviors:")
+    print (names)
+
+    # Add behavior to default.
+    behavior_mng_service.addDefaultBehavior(behavior_name)
+
+    names = behavior_mng_service.getDefaultBehaviors()
+    print ("Default behaviors:")
+    print (names)
+
+    # Remove behavior from default.
+    behavior_mng_service.removeDefaultBehavior(behavior_name)
+
+    names = behavior_mng_service.getDefaultBehaviors()
+    print ("Default behaviors:")
+    print (names)
 
 
 # def check_speed(line_number, line):
@@ -143,6 +235,9 @@ def main():
         testing_class.append_to_csv('OutputScript.csv')
     fileinput.close()
 
+    run_behavior("192.168.50.155", 9559,"dancemoves-a0f94b/YMCA")
+    time.sleep(5)
+    run_behavior("192.168.50.155", 9559,"boot-config/animations/poseInit")
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

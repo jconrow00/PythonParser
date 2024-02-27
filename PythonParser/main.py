@@ -11,7 +11,8 @@ import sys
 import time
 
 from contextlib import closing
-
+pepper_port = 9559
+pepper_ip = "192.168.50.155"
 # Press Shiffor line in fileinput.input(encoding="utf-8"):
 # t+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -217,9 +218,9 @@ def extract_text(line):
 
 def main():
     # receive text input from script file
-    input_script = fileinput.input(files='InputScript.txt')
+    input_script = fileinput.input(files='InputScript2.txt')
 
-    fp = open(r'InputScript.txt', 'r')
+    fp = open(r'InputScript2.txt', 'r')
     lines = len(fp.readlines())
     line_results = [lines]
     fp.close()
@@ -232,12 +233,30 @@ def main():
         gestures = extract_gesture(line)
         testing_class = ScriptLine(voice, text, gestures)
         print(testing_class)
-        testing_class.append_to_csv('OutputScript.csv')
-    fileinput.close()
 
-    run_behavior("192.168.50.155", 9559,"dancemoves-a0f94b/YMCA")
-    time.sleep(5)
-    run_behavior("192.168.50.155", 9559,"boot-config/animations/poseInit")
+        testing_class.append_to_csv('OutputScript.csv')
+
+        # testing below
+        session = qi.Session()
+        session.connect("tcp://" + pepper_ip + ":" + str(pepper_port))
+        tts = session.service("ALTextToSpeech")
+        tts.setLanguage("English")
+        tts.say("My name is Emile.")
+        tts.addToDictionary("Emile", "\\toi=lhp\\E'mil\\toi=orth\\")
+        tts.say("My name is Emile.")
+        tts.deleteFromDictionary ("Emile")
+        tts.say("My name is Emile.")
+        #####
+        tts.say(text)
+        if gestures[0] == "wave":
+            run_behavior(pepper_ip,pepper_port,"dancemoves-a0f94b/Wave and bow")
+        elif gestures[0] == "shocked":
+            run_behavior(pepper_ip,pepper_port,"animations/Stand/Emotions/Negative/Shocked_1")
+        #####
+        # run_behavior(pepper_ip, pepper_port,"dancemoves-a0f94b/YMCA")
+        # time.sleep(5)
+        # run_behavior(pepper_ip, pepper_port,"boot-config/animations/poseInit")
+    fileinput.close()
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':

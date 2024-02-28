@@ -1,18 +1,24 @@
-
 from __future__ import print_function
+import sys
+
 import fileinput
 import decimal
 import fileinput
 import csv
 import naoqi
+import os
 
+from mutagen.mp3 import MP3
+from speechFiler import speech_file
 import qi
-import sys
 import time
-
 from contextlib import closing
-pepper_port = 9559
-pepper_ip = "192.168.50.155"
+from pepper_robot.robot import *
+import pepper_robot.config
+
+PEPPER_PORT = 9559
+PEPPER_IP = '192.168.50.155'
+INPUT_FILE = 'InputScript2.txt'
 # Press Shiffor line in fileinput.input(encoding="utf-8"):
 # t+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -65,7 +71,7 @@ def run_behavior(ip, port, behavior_name):
         session.connect("tcp://" + ip + ":" + str(port))
     except RuntimeError:
         print ("Can't connect to Naoqi at ip \"" + ip + "\" on port " + str(port) +".\n"
-               "Please check your script arguments. Run with -h option for help.")
+                                                                                   "Please check your script arguments. Run with -h option for help.")
         sys.exit(1)
 
     behavior_mng_service = session.service("ALBehaviorManager")
@@ -78,11 +84,9 @@ def getBehaviors(behavior_mng_service):
     """
     Know which behaviors are on the robot.
     """
-
     names = behavior_mng_service.getInstalledBehaviors()
     print ("Behaviors on the robot:")
     print (names)
-
     names = behavior_mng_service.getRunningBehaviors()
     print ("Running behaviors:")
     print (names)
@@ -101,7 +105,6 @@ def launchAndStopBehavior(behavior_mng_service, behavior_name):
             time.sleep(0.5)
         else:
             print ("Behavior is already running.")
-
     else:
         print ("Behavior not found.")
     return
@@ -116,7 +119,6 @@ def launchAndStopBehavior(behavior_mng_service, behavior_name):
         time.sleep(1.0)
     else:
         print ("Behavior is already stopped.")
-
     names = behavior_mng_service.getRunningBehaviors()
     print ("Running behaviors:")
     print (names)
@@ -125,22 +127,17 @@ def defaultBehaviors(behavior_mng_service, behavior_name):
     """
     Set a behavior as default and remove it from default behavior.
     """
-
     # Get default behaviors.
     names = behavior_mng_service.getDefaultBehaviors()
     print ("Default behaviors:")
     print (names)
-
     # Add behavior to default.
     behavior_mng_service.addDefaultBehavior(behavior_name)
-
     names = behavior_mng_service.getDefaultBehaviors()
     print ("Default behaviors:")
     print (names)
-
     # Remove behavior from default.
     behavior_mng_service.removeDefaultBehavior(behavior_name)
-
     names = behavior_mng_service.getDefaultBehaviors()
     print ("Default behaviors:")
     print (names)
@@ -217,50 +214,64 @@ def extract_text(line):
 
 
 def main():
+    # setup CIIRC Pepper API qi wrapper
+    pepper = Pepper(PEPPER_IP, PEPPER_PORT)
     # receive text input from script file
-    input_script = fileinput.input(files='InputScript2.txt')
-
-    fp = open(r'InputScript2.txt', 'r')
+    input_script = fileinput.input(files=INPUT_FILE)
+    # open file
+    fp = open(INPUT_FILE, 'r')
     lines = len(fp.readlines())
     line_results = [lines]
     fp.close()
-
-    # goes through each line of file
     for line in input_script:
-        #line_number = fileinput.lineno()
+        # Extract line to class
+        line_number = fileinput.lineno()
         voice = extract_voice(line)
         text = extract_text(line)
         gestures = extract_gesture(line)
         testing_class = ScriptLine(voice, text, gestures)
         print(testing_class)
+        #testing_class.append_to_csv('OutputScript.csv')
 
-        testing_class.append_to_csv('OutputScript.csv')
+        # Outputs sound file
+        # output_file= 'line' + str(line_number) + ''
+        # speech_file(text, 1, output_file)
+        # audio = MP3(output_file)
+        # playtime = audio.info.length
+        # pepper.play_sound(output_file + '.mp3')
 
         # testing below
         session = qi.Session()
-        session.connect("tcp://" + pepper_ip + ":" + str(pepper_port))
+        session.connect("tcp://" + PEPPER_IP + ":" + str(PEPPER_PORT))
         tts = session.service("ALTextToSpeech")
+
         tts.setLanguage("English")
         tts.say("My name is Emile.")
-        tts.addToDictionary("Emile", "\\toi=lhp\\E'mil\\toi=orth\\")
-        tts.say("My name is Emile.")
-        tts.deleteFromDictionary ("Emile")
-        tts.say("My name is Emile.")
-        #####
-        tts.say(text)
+        # tts.addToDictionary("Emile", "\\toi=lhp\\E'mil\\toi=orth\\")
+        # tts.say("My name is Emile.")
+        # tts.deleteFromDictionary ("Emile")
+        # tts.say("My name is Emile.")
+
+        # Testing Below
+        # tts.say(text)
+        behavior_mng_service = session.service("ALBehaviorManager")
         if gestures[0] == "wave":
-            run_behavior(pepper_ip,pepper_port,"dancemoves-a0f94b/Wave and bow")
+            run_behavior(PEPPER_IP,PEPPER_PORT,"dancemoves-a0f94b/Wave and bow")
+            time.sleep(11.0)
+            behavior_mng_service.stopBehavior("dancemoves-a0f94b/Wave and bow") 
         elif gestures[0] == "shocked":
-            run_behavior(pepper_ip,pepper_port,"animations/Stand/Emotions/Negative/Shocked_1")
-        #####
-        # run_behavior(pepper_ip, pepper_port,"dancemoves-a0f94b/YMCA")
-        # time.sleep(5)
-        # run_behavior(pepper_ip, pepper_port,"boot-config/animations/poseInit")
+            run_behavior(PEPPER_IP,PEPPER_PORT,"animations/Stand/Emotions/Negative/Shocked_1")
+            time.sleep(4.5)
+            behavior_mng_service.stopBehavior("animations/Stand/Emotions/Negative/Shocked_1") 
+        run_behavior(PEPPER_IP, PEPPER_PORT, "boot-config/animations/poseInitUp")
+        time.sleep(1.2)
+        run_behavior(PEPPER_IP, PEPPER_PORT, "boot-config/animations/poseInitUp")
+
     fileinput.close()
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
-
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

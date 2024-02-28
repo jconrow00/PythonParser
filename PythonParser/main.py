@@ -245,15 +245,8 @@ def main():
         session.connect("tcp://" + PEPPER_IP + ":" + str(PEPPER_PORT))
         tts = session.service("ALTextToSpeech")
 
-        tts.setLanguage("English")
-        tts.say("My name is Emile.")
-        # tts.addToDictionary("Emile", "\\toi=lhp\\E'mil\\toi=orth\\")
-        # tts.say("My name is Emile.")
-        # tts.deleteFromDictionary ("Emile")
-        # tts.say("My name is Emile.")
-
         # Testing Below
-        # tts.say(text)
+        tts.say(text)
         behavior_mng_service = session.service("ALBehaviorManager")
         if gestures[0] == "wave":
             run_behavior(PEPPER_IP,PEPPER_PORT,"dancemoves-a0f94b/Wave and bow")

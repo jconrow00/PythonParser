@@ -1,146 +1,208 @@
 from __future__ import print_function
 import sys
-
 import fileinput
 import decimal
 import fileinput
 import csv
-import naoqi
 import os
-
 from mutagen.mp3 import MP3
 from speechFiler import speech_file
-import qi
 import time
 from contextlib import closing
-from pepper_robot.robot import *
-import pepper_robot.config
 
-PEPPER_PORT = 9559
-PEPPER_IP = '192.168.50.155'
-INPUT_FILE = 'InputScript2.txt'
-# Press Shiffor line in fileinput.input(encoding="utf-8"):
-# t+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-#import torch
-#from transformers import pipeline, DistilBertTokenizer, DistilBertForSequenceClassification, TextClassificationPipeline
+# import urllib3.contrib.pyopenssl
+# import certifi
+# import urllib3
+# http = urllib3.PoolManager(
+#     cert_reqs='CERT_REQUIRED',
+#     ca_certs=certifi.where()
+# )
+# urllib3.contrib.pyopenssl.inject_into_urllib3()
 
 
-#model_id = "lxyuan/distilbert-base-multilingual-cased-sentiments-student"
+INPUT_FILE = 'inputs/InputScript2.txt'
 
 
-#def analyze_sentiment(text):
-#    sentiment_analyzer = pipeline("sentiment-analysis", model=model_id, top_k=None)
-#    result = sentiment_analyzer(text)
-#    return result[0]['label'], result[0]['score']
-
-
+# CLASS that holds the characteristics of a script line
 class ScriptLine:
-    def __init__(self, voice=-1, text=None, gestures=[]):
-        self.voice = voice
-        self.text = text
-        self.gestures = gestures
+    def __init__(self, line="1) Hello #wave World", line_num=1):
+        # Sets almost all class variables
+        self.line = line
+        self.text = self.extract_text()
+        self.voice = self.extract_voice()
+        self.gesture_arr = self.extract_gesture()
+        self.gesture_pos_arr = self.extract_gesture_pos()
+        self.line_no = line_num
+
+        # Outputs sound file
+        self.output_file = 'outputs/' + 'line' + str(line_num) + '.mp3'
+            # https://www.google.com/supported_domains
+            # tld can be eg. "com", "com.hk", "com.au", "com.bd",
+        speech_file(self.text, 1, self.output_file, "com")
+        audio = MP3(self.output_file)
+        self.playtime = audio.info.length
+
+        # Sets gesture_time class variable
+        self.gesture_time = 0
+        for i in range(len(self.gesture_arr)):
+            self.gesture_time += get_gesture_length(self.gesture_arr[i])
+
+        #selects the longest time
+        self.gestures_are_longer = True if self.gesture_time > self.playtime else False
+        self.total_time = self.gesture_time if self.gestures_are_longer else self.playtime
+        self.help_csv()
 
     def __str__(self):
-        string = ('\033[91mVoice: {} \033[0m| \033[92mText: "{}" \033[0m| \033[93mGestures: '
-                  .format(self.voice, self.text))
-        for i in range(len(self.gestures)):
-            if i < len(self.gestures) - 1:
-                string += self.gestures[i]
+        string = ('\033[94mPlaytime / Gesturetime: {} / {} \033[0m| \033[91mVoice: {} \033[0m|'
+                  ' \033[92mText: "{}" \033[0m| \033[93mGestures: '
+                  .format(self.playtime, self.gesture_time, self.voice, self.text))
+        for i in range(len(self.gesture_arr)):
+            if i < len(self.gesture_arr) - 1:
+                string += self.gesture_arr[i]
                 string += ', '
             else:
-                string += self.gestures[i]
+                string += self.gesture_arr[i]
+        string += "\033[0m"
         return string
 
+    # RETURNS the text element string from script line
+    def extract_text(self):
+        # get rid of the "person" syntax
+        liner = self.line
+        liner = liner.partition(')')[2]
+        gesture_count = liner.count('#')
+        # initialize empty line to build
+        text = ""
+        for i in range(gesture_count + 1):
+            # adds the text to the left of the leftmost gesture
+            text += liner.partition('#')[0]
+            # updates the running line to remove up to the leftmost gesture
+            liner = liner.partition('#')[2]
+            # updates the running line to remove the leftmost gesture
+            liner = liner.partition(' ')[2]
+        text = text.rstrip('\n ')
+        text = text.lstrip('\n ')
+        return text
+
+    # RETURNS an int of the voice
+    def extract_voice(self):
+        return self.line.partition(')')[0]
+
+    # RETURNS an array of gestures in the form: "BLAH #gesture1 BLAH #gesture2 BLAH" -> arr = [gesture1, gesture 2]
+    def extract_gesture(self):
+        liner = self.line
+        gesture_count = liner.count('#')
+        gestures = [''] * gesture_count
+        for i in range(gesture_count):
+            # removes all to the left of the first '#'
+            gestures[i] = liner.partition('#')[2]
+            # copies the removal to the running line string
+            liner = gestures[i]
+            # removes all after the gesture
+            gestures[i] = gestures[i].partition(' ')[0]
+            gestures[i] = gestures[i].rstrip('\n ')
+            gestures[i] = gestures[i].lstrip('\n ')
+        return gestures
+
+    # RETURNS an array gesture position from the line
+    def extract_gesture_pos(self):
+        pos_arr = [-1] * len(self.gesture_arr)
+        for i in range(len(self.gesture_arr)):
+            pos_arr[i] = self.line.find(self.gesture_arr[i]) - 4   # remove 3 positions
+                                                                    # for the voice spacer
+                                                                    # and 1 for the '#' sign
+            print (pos_arr[i])      # TEMP
+        return pos_arr
+
+    # OUTPUTS two csv files in the /output folder with the timings for the voices and gestures
     def help_csv(self):
-        array = [self.voice, self.text]
-        for i in range(len(self.gestures)):
-            array.append(self.gestures[i])
-        return array
+        with open("outputs/voices.csv", 'a+') as vf, open("outputs/gestures.csv", 'a+') as gf:
+            voice_writer = csv.writer(vf)
+            gesture_writer = csv.writer(gf)
+            if self.gestures_are_longer:
+                #commits voice csv
+                delay_v = str((self.gesture_time - self.playtime) / 2)
+                file_v = self.output_file.partition('/')[2]      # removes 'outputs/'
+                string_v = [delay_v, file_v]
+                voice_writer.writerow(string_v)
+                #commits gesture csv
+                # for i in range(len(self.gesture_arr)):
+                gesture_writer.writerow(self.gesture_arr)
+            elif not self.gestures_are_longer:
+                #commits voice csv
+                file_v = self.output_file.partition('/')[2]      # removes 'outputs/'
+                string_v = [file_v]
+                voice_writer.writerow(string_v)
+                #commits gesture csv
+                # MAYBE TODO remake the division of the gestures according to gesture length NOT gesture script position
+                string_g = []
+                last_pos_ratio = 0.0
+                for i in range(len(self.gesture_arr)):
+                    position_ratio = float(self.gesture_pos_arr[i]) / len(self.line)   # gets the fractional position
+                    delay_g = str((position_ratio - last_pos_ratio) * self.playtime)
+                    string_g += [delay_g, self.gesture_arr[i]]
+                    last_pos_ratio = position_ratio     # saves last position ratio
+                gesture_writer.writerow(string_g)
 
-    def append_to_csv(self, filename):
-        with open(filename, 'a') as f:
-            writer = csv.writer(f)
-            writer.writerow(self.help_csv())
+
+# RETURNS from a table the set length of each designed gesture
+def get_gesture_length(gesture_name):
+    if gesture_name == 'wave':
+        return 1.0
+    elif gesture_name == 'shocked':
+        return 4.5
 
 
-def run_behavior(ip, port, behavior_name):
-    session = qi.Session()
-    try:
-        session.connect("tcp://" + ip + ":" + str(port))
-    except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + ip + "\" on port " + str(port) +".\n"
-                                                                                   "Please check your script arguments. Run with -h option for help.")
-        sys.exit(1)
-
-    behavior_mng_service = session.service("ALBehaviorManager")
-    getBehaviors(behavior_mng_service)
-    launchAndStopBehavior(behavior_mng_service, behavior_name)
-    defaultBehaviors(behavior_mng_service, behavior_name)
-
-
-def getBehaviors(behavior_mng_service):
-    """
-    Know which behaviors are on the robot.
-    """
-    names = behavior_mng_service.getInstalledBehaviors()
-    print ("Behaviors on the robot:")
-    print (names)
-    names = behavior_mng_service.getRunningBehaviors()
-    print ("Running behaviors:")
-    print (names)
-
-def launchAndStopBehavior(behavior_mng_service, behavior_name):
-    """
-    Launch and stop a behavior, if possible.
-    """
-    # Check that the behavior exists.
-    if behavior_mng_service.isBehaviorInstalled(behavior_name):
-        # Check that it is not already running.
-        if not behavior_mng_service.isBehaviorRunning(behavior_name):
-            # Launch behavior. This is a blocking call, use _async=True if you do not
-            # want to wait for the behavior to finish.
-            behavior_mng_service.runBehavior(behavior_name, _async=True)
-            time.sleep(0.5)
-        else:
-            print ("Behavior is already running.")
+# RETURNS 1 if the gestures take longer, 0 if voice takes longer
+def is_gestures_longer(gestures, voice_len):
+    gestures_len = 0.0
+    for i in range(len(gestures)):
+        gestures_len += get_gesture_length(gestures[i])
+    if gestures_len > voice_len:
+        return True
     else:
-        print ("Behavior not found.")
-    return
+        return False
 
-    names = behavior_mng_service.getRunningBehaviors()
-    print ("Running behaviors:")
-    print (names)
 
-    # Stop the behavior.
-    if behavior_mng_service.isBehaviorRunning(behavior_name):
-        behavior_mng_service.stopBehavior(behavior_name)
-        time.sleep(1.0)
-    else:
-        print ("Behavior is already stopped.")
-    names = behavior_mng_service.getRunningBehaviors()
-    print ("Running behaviors:")
-    print (names)
+# CLEARS out the output files from previous run
+def clear_csv():
+    with open("outputs/voices.csv", "w") as t:
+        t.truncate()
+    with open("outputs/gestures.csv", "w") as y:
+        y.truncate()
 
-def defaultBehaviors(behavior_mng_service, behavior_name):
-    """
-    Set a behavior as default and remove it from default behavior.
-    """
-    # Get default behaviors.
-    names = behavior_mng_service.getDefaultBehaviors()
-    print ("Default behaviors:")
-    print (names)
-    # Add behavior to default.
-    behavior_mng_service.addDefaultBehavior(behavior_name)
-    names = behavior_mng_service.getDefaultBehaviors()
-    print ("Default behaviors:")
-    print (names)
-    # Remove behavior from default.
-    behavior_mng_service.removeDefaultBehavior(behavior_name)
-    names = behavior_mng_service.getDefaultBehaviors()
-    print ("Default behaviors:")
-    print (names)
+
+def main():
+    clear_csv()
+    # receive text input from script file
+    input_script = fileinput.input(files=INPUT_FILE)
+    # # open file
+    # fp = open(INPUT_FILE, 'r')
+    # lines = len(fp.readlines())
+    # line_results = [lines]
+    # fp.close()
+
+    for line in input_script:
+        # Extract line to class
+        line_number = fileinput.lineno()
+
+
+
+
+        testing_class = ScriptLine(line, line_number)
+        print(testing_class)
+
+        # #
+        # gestures_take_longer = is_gestures_longer(gestures_arr, playtime)
+        # csv_handling(gestures_arr, gestures_take_longer, playtime)
+
+
+    fileinput.close()
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()
 
 
 # def check_speed(line_number, line):
@@ -158,44 +220,21 @@ def defaultBehaviors(behavior_mng_service, behavior_name):
 #    return line_speed
 
 
-# RETURNS an int of the voice
-def extract_voice(line):
-    return line.partition(')')[0]
+# Press Shiffor line in fileinput.input(encoding="utf-8"):
+# t+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+
+#import torch
+#from transformers import pipeline, DistilBertTokenizer, DistilBertForSequenceClassification, TextClassificationPipeline
 
 
-# RETURNS an array of gestures in the form: BLAH #gesture1 BLAH #gesture2 BLAH -> arr = [gesture1, gesture 2]
-def extract_gesture(line):
-    gesture_count = line.count('#')
-    gestures = [''] * gesture_count
-    for i in range(gesture_count):
-        # removes all to the left of the first '#'
-        gestures[i] = line.partition('#')[2]
-        # copies the removal to the running line string
-        line = gestures[i]
-        # removes all after the gesture
-        gestures[i] = gestures[i].partition(' ')[0]
-        gestures[i] = gestures[i].rstrip('\n ')
-        gestures[i] = gestures[i].lstrip('\n ')
-    return gestures
+#model_id = "lxyuan/distilbert-base-multilingual-cased-sentiments-student"
 
 
-def extract_text(line):
-    # get rid of the "person" syntax
-    line = line.partition(')')[2]
-    gesture_count = line.count('#')
-    # initialize empty line to build
-    text = ""
-    for i in range(gesture_count + 1):
-        # adds the text to the left of the leftmost gesture
-        text += line.partition('#')[0]
-        # updates the running line to remove up to the leftmost gesture
-        line = line.partition('#')[2]
-        # updates the running line to remove the leftmost gesture
-        line = line.partition(' ')[2]
-    text = text.rstrip('\n ')
-    text = text.lstrip('\n ')
-    return text
-
+#def analyze_sentiment(text):
+#    sentiment_analyzer = pipeline("sentiment-analysis", model=model_id, top_k=None)
+#    result = sentiment_analyzer(text)
+#    return result[0]['label'], result[0]['score']
 
 #def print_line_sentiments(line_number, sentiment_file_results):
 #    # prints out these line-sentiments
@@ -211,60 +250,3 @@ def extract_text(line):
 #        print('\t',current_sentiment_label,)
 #        print('\033[0m \t', round(sentiment_file_results[line_number][0][i]['score'] * 100, 2), '%')
 #    return
-
-
-def main():
-    # setup CIIRC Pepper API qi wrapper
-    pepper = Pepper(PEPPER_IP, PEPPER_PORT)
-    # receive text input from script file
-    input_script = fileinput.input(files=INPUT_FILE)
-    # open file
-    fp = open(INPUT_FILE, 'r')
-    lines = len(fp.readlines())
-    line_results = [lines]
-    fp.close()
-    for line in input_script:
-        # Extract line to class
-        line_number = fileinput.lineno()
-        voice = extract_voice(line)
-        text = extract_text(line)
-        gestures = extract_gesture(line)
-        testing_class = ScriptLine(voice, text, gestures)
-        print(testing_class)
-        #testing_class.append_to_csv('OutputScript.csv')
-
-        # Outputs sound file
-        # output_file= 'line' + str(line_number) + ''
-        # speech_file(text, 1, output_file)
-        # audio = MP3(output_file)
-        # playtime = audio.info.length
-        # pepper.play_sound(output_file + '.mp3')
-
-        # testing below
-        session = qi.Session()
-        session.connect("tcp://" + PEPPER_IP + ":" + str(PEPPER_PORT))
-        tts = session.service("ALTextToSpeech")
-
-        # Testing Below
-        tts.say(text)
-        behavior_mng_service = session.service("ALBehaviorManager")
-        if gestures[0] == "wave":
-            run_behavior(PEPPER_IP,PEPPER_PORT,"dancemoves-a0f94b/Wave and bow")
-            time.sleep(11.0)
-            behavior_mng_service.stopBehavior("dancemoves-a0f94b/Wave and bow") 
-        elif gestures[0] == "shocked":
-            run_behavior(PEPPER_IP,PEPPER_PORT,"animations/Stand/Emotions/Negative/Shocked_1")
-            time.sleep(4.5)
-            behavior_mng_service.stopBehavior("animations/Stand/Emotions/Negative/Shocked_1") 
-        run_behavior(PEPPER_IP, PEPPER_PORT, "boot-config/animations/poseInitUp")
-        time.sleep(1.2)
-        run_behavior(PEPPER_IP, PEPPER_PORT, "boot-config/animations/poseInitUp")
-
-    fileinput.close()
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    main()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/

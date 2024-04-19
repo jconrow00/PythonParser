@@ -4,7 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="9ef937e7-e4c6-4368-b81b-cdb7129fe38d" name="Changes" comment="" />
+=======
+    <list default="true" id="9ef937e7-e4c6-4368-b81b-cdb7129fe38d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/delays/pepperExecute_delays.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gesturesConfig.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/playFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inputs/InputScript2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/inputs/InputScript2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/delays/parser_delays.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs/gestures.csv" beforeDir="false" afterPath="$PROJECT_DIR$/outputs/gestures.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs/line1.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs/line2.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs/voices.csv" beforeDir="false" afterPath="$PROJECT_DIR$/outputs/voices.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepperExecute.py" beforeDir="false" afterPath="$PROJECT_DIR$/pepperExecute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speechFiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/speechFiler.py" afterDir="false" />
+    </list>
+>>>>>>> ca29ac74129ed1e21c10c77b0c054c9f16b75276
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,7 +88,11 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+<<<<<<< HEAD
     &quot;last_opened_file_path&quot;: &quot;/home/joseph/Documents/OSU/Senior/Thesis/PythonParser/PythonParser1&quot;,
+=======
+    &quot;last_opened_file_path&quot;: &quot;/home/joseph/Documents/OSU/Senior/Thesis/PythonParser/PythonParser&quot;,
+>>>>>>> ca29ac74129ed1e21c10c77b0c054c9f16b75276
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -193,8 +216,11 @@
       <workItem from="1712590094442" duration="10792000" />
       <workItem from="1713192880446" duration="13329000" />
       <workItem from="1713563448198" duration="90000" />
+<<<<<<< HEAD
       <workItem from="1713570033122" duration="32000" />
       <workItem from="1713570104462" duration="6000" />
+=======
+>>>>>>> ca29ac74129ed1e21c10c77b0c054c9f16b75276
     </task>
     <servers />
   </component>

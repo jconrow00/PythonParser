@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
+<<<<<<< HEAD
   <component name="NewModuleRootManager">
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+=======
+>>>>>>> ca29ac74129ed1e21c10c77b0c054c9f16b75276
   <component name="PyDocumentationSettings">
     <option name="format" value="PLAIN" />
     <option name="myDocStringFormat" value="Plain" />

@@ -1,5 +1,4 @@
 import time
-
 from pepper_robot.robot import *
 import pepper_robot.config
 import qi
@@ -7,9 +6,23 @@ import naoqi
 import sys
 import fileinput
 import csv
-from main import get_gesture_length
-PEPPER_PORT = 9559
-PEPPER_IP = '192.168.50.155'
+import execnet
+from gesturesConfig import *
+from threading import Thread
+
+# PEPPER_IP = '192.168.50.155'
+# PEPPER_PORT = 9559
+PEPPER_IP = 'localhost'
+PEPPER_PORT = 45285
+
+def call_python_version(Version, Module, Function, ArgumentList):
+    gw = execnet.makegateway("popen//python=python%s" % Version)
+    channel = gw.remote_exec("""
+        from %s import %s as the_function
+        channel.send(the_function(*channel.receive()))
+    """ % (Module, Function))
+    channel.send(ArgumentList)
+    return channel.receive()
 
 
 def run_behavior(ip, port, behavior_name):
@@ -92,70 +105,35 @@ def defaultBehaviors(behavior_mng_service, behavior_name):
     print (names)
 
 
-# RETURNS the pepper stored behavior file from a table according to gesture name
-def get_behavior_name(gesture):
-    if gesture == "wave":
-        return "dancemoves-a0f94b/Wave and bow"
-    elif gesture == "shocked":
-        return "animations/Stand/Emotions/Negative/Shocked_1"
-
 def main(session):
     # setup CIIRC Pepper API qi wrapper
-    pepper = Pepper(PEPPER_IP, PEPPER_PORT)
+    # pepper = Pepper(PEPPER_IP, PEPPER_PORT)
 
-    # Testing Below
-    tts = session.service("ALTextToSpeech")
     behavior_service = session.service("ALBehaviorManager")
     audio_player_service = session.service("ALAudioPlayer")
+    behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
 
-    with open("outputs/voices.csv", 'r') as vf, open("outputs/gestures.csv", 'r') as gf:
-        voice_reader = csv.reader(vf)
-        gesture_reader = csv.reader(gf)
-        line_number = 1
-        for row_v, row_g in voice_reader, gesture_reader:   # for each script line
-            pepper.upload_file('outputs/' + 'line' + str(line_number) + '.mp3')     # scp upload
-            fileId = audio_player_service.loadFile('outputs/' + 'line' + str(line_number) + '.mp3')
-            if len(row_v) == 1:     # if voice is longer than gesture
-                # pepper.play_sound('line' + str(line_number) + '.mp3')
-                audio_player_service.play(fileId, _async=True)
-                for i in row_g:
-                    if row_g[i].replace('.', '', 1).isdigit():    # if gesture column is a delay
-                        time.sleep(row_g[i])
-                    else:
-                        behavior_service.runBehavior(get_behavior_name(row_g[i]), _async=False)  # _async is False = wait for finish
-                        behavior_service.stopBehavior(get_behavior_name(row_g[i]))
-            else:    # if gesture is longer than voice
-                behavior_service.runBehavior((get_gesture_length(row_g[0])), _async=False)
-                behavior_service.stopBehavior(get_behavior_name(row_g[0]))
-                if row_v[0] > get_gesture_length(row_g[0]):     # if the first gesture is shorter than voice delay
-                    time.sleep(row_v[0] - get_gesture_length(row_g[0]))     # sleeps the difference in delay
-                # pepper.play_sound('line' + str(line_number) + '.mp3')
-                audio_player_service.play(fileId, _async=True)
-                if len(row_g) > 1:   # the next gestures
-                    for i in row_g:
-                        if row_g[i+1].replace('.', '', 1).isdigit():    # if is delay
-                            time.sleep(row_g[i + 1])
-                        else:  # if is behavior
-                            behavior_service.runBehavior(get_behavior_name(row_g[i + 1]), _async=False)
-                            behavior_service.stopBehavior(get_behavior_name(row_g[i + 1]))
-            line_number += 1
-
-
-    # tts.say(text)
-    # behavior_mng_service = session.service("ALBehaviorManager")
-    # if gestures[0] == "wave":
-    #     run_behavior(PEPPER_IP, PEPPER_PORT, "dancemoves-a0f94b/Wave and bow")
-    #     time.sleep(11.0)
-    #     behavior_mng_service.stopBehavior("dancemoves-a0f94b/Wave and bow")
-    # elif gestures[0] == "shocked":
-    #     run_behavior(PEPPER_IP, PEPPER_PORT, "animations/Stand/Emotions/Negative/Shocked_1")
-    #     time.sleep(4.5)
-    #     behavior_mng_service.stopBehavior("animations/Stand/Emotions/Negative/Shocked_1")
-    # run_behavior(PEPPER_IP, PEPPER_PORT, "boot-config/animations/poseInitUp")
-    # time.sleep(1.2)
-    # run_behavior(PEPPER_IP, PEPPER_PORT, "boot-config/animations/poseInitUp")
-    #
-    # pepper.play_sound(output_file)
+    print "in main" #TEMP
+    with open("outputs/commandFile.csv", 'r') as file:
+        file_reader = csv.reader(file)
+        line_number = 0     # line number incrementer for file name
+        current_time = 0.0
+        print "before file reader" #TEMP
+        for row in file_reader:   # for each script line
+            behavior_service.runBehavior(get_behavior_name('init'), _async=False)  #    _async is False = wait for finish
+            if line_number == 0:
+                print "hitting line_num=0" #TEMP
+                line_number += 1
+                continue
+            print "hitting line_num1 in loop" #TEMP
+            file_name = 'outputs/line' + str(line_number) + '.wav'
+            time.sleep(float(row[0]) - current_time)   #delays until the next command
+            if row[1].find('.wav') != -1: #if current row is a voice file
+                call_python_version("3.9", "playFile", "playFile", ['outputs/' + row[1], False])      # play the sound before gestures
+            else:
+                behavior_service.runBehavior(get_behavior_name(row[1]), _async=False)  # _async is False = wait for finish
+            line_number += 1    # line number increment for file name
+            current_time = float(row[0])  #one second extra for init pose
 
 
 # Press the green button in the gutter to run the script.

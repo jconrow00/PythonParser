@@ -5,10 +5,12 @@ import decimal
 import fileinput
 import csv
 import os
-from mutagen.mp3 import MP3
+from mutagen.wave import WAVE
 from speechFiler import speech_file
+from gesturesConfig import *
 import time
 from contextlib import closing
+import execnet
 
 # import urllib3.contrib.pyopenssl
 # import certifi
@@ -23,10 +25,21 @@ from contextlib import closing
 INPUT_FILE = 'inputs/InputScript2.txt'
 
 
+# RETURNS called function in module of python version
+def call_python_version(Version, Module, Function, ArgumentList):
+    gw = execnet.makegateway("popen//python=python%s" % Version)
+    channel = gw.remote_exec("""
+        from %s import %s as the_function
+        channel.send(the_function(*channel.receive()))
+    """ % (Module, Function))
+    channel.send(ArgumentList)
+    return channel.receive()
+
 # CLASS that holds the characteristics of a script line
 class ScriptLine:
-    def __init__(self, line="1) Hello #wave World", line_num=1):
+    def __init__(self, current_timestamp, line="1) Hello #wave World", line_num=1, ):
         # Sets almost all class variables
+        self.current_timestamp = current_timestamp
         self.line = line
         self.text = self.extract_text()
         self.voice = self.extract_voice()
@@ -35,12 +48,10 @@ class ScriptLine:
         self.line_no = line_num
 
         # Outputs sound file
-        self.output_file = 'outputs/' + 'line' + str(line_num) + '.mp3'
-            # https://www.google.com/supported_domains
-            # tld can be eg. "com", "com.hk", "com.au", "com.bd",
-        speech_file(self.text, 1, self.output_file, "com")
-        audio = MP3(self.output_file)
-        self.playtime = audio.info.length
+        self.output_file = 'outputs/' + 'line' + str(line_num) + '.wav'
+        speech_file(self.text, self.output_file)
+        audio = WAVE(self.output_file)
+        self.voice_time = audio.info.length
 
         # Sets gesture_time class variable
         self.gesture_time = 0
@@ -48,14 +59,16 @@ class ScriptLine:
             self.gesture_time += get_gesture_length(self.gesture_arr[i])
 
         #selects the longest time
-        self.gestures_are_longer = True if self.gesture_time > self.playtime else False
-        self.total_time = self.gesture_time if self.gestures_are_longer else self.playtime
+        self.gestures_are_longer = True if self.gesture_time > self.voice_time else False
+        self.total_time = self.gesture_time if self.gestures_are_longer else self.voice_time
+
         self.help_csv()
+
 
     def __str__(self):
         string = ('\033[94mPlaytime / Gesturetime: {} / {} \033[0m| \033[91mVoice: {} \033[0m|'
                   ' \033[92mText: "{}" \033[0m| \033[93mGestures: '
-                  .format(self.playtime, self.gesture_time, self.voice, self.text))
+                  .format(self.voice_time, self.gesture_time, self.voice, self.text))
         for i in range(len(self.gesture_arr)):
             if i < len(self.gesture_arr) - 1:
                 string += self.gesture_arr[i]
@@ -108,49 +121,33 @@ class ScriptLine:
     def extract_gesture_pos(self):
         pos_arr = [-1] * len(self.gesture_arr)
         for i in range(len(self.gesture_arr)):
-            pos_arr[i] = self.line.find(self.gesture_arr[i]) - 4   # remove 3 positions
+            pos_arr[i] = self.line.find(self.gesture_arr[i]) - 4 - i   # remove 3 positions
                                                                     # for the voice spacer
                                                                     # and 1 for the '#' sign
-            print (pos_arr[i])      # TEMP
+            # print (pos_arr[i])      # TEMP
         return pos_arr
 
     # OUTPUTS two csv files in the /output folder with the timings for the voices and gestures
     def help_csv(self):
-        with open("outputs/voices.csv", 'a+') as vf, open("outputs/gestures.csv", 'a+') as gf:
-            voice_writer = csv.writer(vf)
-            gesture_writer = csv.writer(gf)
+        with open("outputs/commandFile.csv", 'a+') as file:
+            file_writer = csv.writer(file)
+            #adds the voice at current time stamp
+            file_writer.writerow([self.current_timestamp, self.output_file.partition('/')[2]])    #removes 'outputs/' and adds voice timeline
+
+            #adds the gesture positions in at correct times
+            last_pos_ratio = 0.0
+            for i in range(len(self.gesture_arr)):
+                position_ratio = float(self.gesture_pos_arr[i]) / len(self.line)  # gets the fractional position
+                delay = (position_ratio - last_pos_ratio) * self.voice_time
+                timestamp = self.current_timestamp + delay
+                file_writer.writerow([timestamp, self.gesture_arr[i]])
+                last_pos_ratio = position_ratio  # saves last position ratio
+
+            #adds to the ongoing current timestamp for the next line
             if self.gestures_are_longer:
-                #commits voice csv
-                delay_v = str((self.gesture_time - self.playtime) / 2)
-                file_v = self.output_file.partition('/')[2]      # removes 'outputs/'
-                string_v = [delay_v, file_v]
-                voice_writer.writerow(string_v)
-                #commits gesture csv
-                # for i in range(len(self.gesture_arr)):
-                gesture_writer.writerow(self.gesture_arr)
-            elif not self.gestures_are_longer:
-                #commits voice csv
-                file_v = self.output_file.partition('/')[2]      # removes 'outputs/'
-                string_v = [file_v]
-                voice_writer.writerow(string_v)
-                #commits gesture csv
-                # MAYBE TODO remake the division of the gestures according to gesture length NOT gesture script position
-                string_g = []
-                last_pos_ratio = 0.0
-                for i in range(len(self.gesture_arr)):
-                    position_ratio = float(self.gesture_pos_arr[i]) / len(self.line)   # gets the fractional position
-                    delay_g = str((position_ratio - last_pos_ratio) * self.playtime)
-                    string_g += [delay_g, self.gesture_arr[i]]
-                    last_pos_ratio = position_ratio     # saves last position ratio
-                gesture_writer.writerow(string_g)
-
-
-# RETURNS from a table the set length of each designed gesture
-def get_gesture_length(gesture_name):
-    if gesture_name == 'wave':
-        return 1.0
-    elif gesture_name == 'shocked':
-        return 4.5
+                self.current_timestamp += self.gesture_time
+            else:
+                self.current_timestamp += self.voice_time
 
 
 # RETURNS 1 if the gestures take longer, 0 if voice takes longer
@@ -166,10 +163,12 @@ def is_gestures_longer(gestures, voice_len):
 
 # CLEARS out the output files from previous run
 def clear_csv():
-    with open("outputs/voices.csv", "w") as t:
+    with open("outputs/commandFile.csv", "w") as t:
         t.truncate()
-    with open("outputs/gestures.csv", "w") as y:
-        y.truncate()
+    # adds header
+    with open("outputs/commandFile.csv", 'a+') as file:
+        file_writer = csv.writer(file)
+        file_writer.writerow(['timestamp', 'action', '(voice)', '(speed)'])
 
 
 def main():
@@ -181,16 +180,19 @@ def main():
     # lines = len(fp.readlines())
     # line_results = [lines]
     # fp.close()
-
+    ongoing_length = 0.0
     for line in input_script:
         # Extract line to class
         line_number = fileinput.lineno()
 
 
 
+        testing_class = ScriptLine(ongoing_length, line, line_number)
 
-        testing_class = ScriptLine(line, line_number)
+        # adds the line length to the onging total length
+        ongoing_length += testing_class.total_time
         print(testing_class)
+
 
         # #
         # gestures_take_longer = is_gestures_longer(gestures_arr, playtime)
@@ -202,6 +204,10 @@ def main():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    # speech_file("yoooo hooooo bababooie", "outputs/bababooie.wav")
+    # audio = WAVE("outputs/bababooie.wav")
+    # playtime = audio.info.length
+    # print("playtime: ", playtime)
     main()
 
 

@@ -6,8 +6,8 @@ import fileinput
 import csv
 import os
 from mutagen.wave import WAVE
-from speechFiler import speech_file
-from gesturesConfig import *
+from ./../speechFiler import speech_file
+from ./../gesturesConfig import *
 import time
 from contextlib import closing
 import execnet

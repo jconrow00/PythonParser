@@ -4,169 +4,87 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-<<<<<<< HEAD
-    <list default="true" id="9ef937e7-e4c6-4368-b81b-cdb7129fe38d" name="Changes" comment="" />
-=======
-    <list default="true" id="9ef937e7-e4c6-4368-b81b-cdb7129fe38d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/delays/pepperExecute_delays.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gesturesConfig.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/playFile.py" afterDir="false" />
+    <list default="true" id="16209bf3-78c0-41c7-8d16-22b45846e2e5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/PythonParser.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PythonParser.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PythonParser1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonParser1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inputs/InputScript2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/inputs/InputScript2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/delays/parser_delays.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/outputs/gestures.csv" beforeDir="false" afterPath="$PROJECT_DIR$/outputs/gestures.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/outputs/line1.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/outputs/line2.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/outputs/voices.csv" beforeDir="false" afterPath="$PROJECT_DIR$/outputs/voices.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepperExecute.py" beforeDir="false" afterPath="$PROJECT_DIR$/pepperExecute.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/speechFiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/speechFiler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pepper Examples/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/Pepper Examples/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pepper Examples/albehaviormanager_example.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/Pepper Examples/albehaviormanager_example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pepper Examples/almotion_poseInit.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/Pepper Examples/almotion_poseInit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pepper Examples/almotion_poseZero.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/Pepper Examples/almotion_poseZero.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/camera_stream.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/camera_stream.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/control.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/dance.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/dance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/build_doc.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/build_doc.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/contacts.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/contacts.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/contribution.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/contribution.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/installation.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/installation.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/make.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/make.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/pepper_doc.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/pepper_doc.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/publish_docs.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/publish_docs.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/publish_docs.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/publish_docs.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/robot_teleoperation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/robot_teleoperation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/tablet_stream.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/tablet_stream.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/throw_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/throw_demo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/topics/remote.top" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/topics/remote.top" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepper_robot/topics/remote_commands.top" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/topics/remote_commands.top" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/PythonParser2.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/vcs.xml" beforeDir="false" />
     </list>
->>>>>>> ca29ac74129ed1e21c10c77b0c054c9f16b75276
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
-  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
-    <envs>
-      <env key="FLASK_APP" value="app" />
-    </envs>
-    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
-    <option name="myEnvs">
-      <map>
-        <entry key="FLASK_APP" value="app" />
-      </map>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/main.py" root0="FORCE_HIGHLIGHTING" />
-  </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 5
-}</component>
-  <component name="ProjectId" id="2bhoysTMZ2Gpr2QhLrRpc0swMlM" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="2fLIEREJMVWIYlAlR35zalbSgv8" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.__init__.executor&quot;: &quot;Run&quot;,
-    &quot;Python.albehaviormanager_example.executor&quot;: &quot;Run&quot;,
-    &quot;Python.almotion_poseInit.executor&quot;: &quot;Run&quot;,
-    &quot;Python.almotion_poseZero.executor&quot;: &quot;Run&quot;,
-    &quot;Python.almotion_stiffnessOff.executor&quot;: &quot;Run&quot;,
-    &quot;Python.almotion_stiffnessOn.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gesturesConfig.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pepperExecute.executor&quot;: &quot;Run&quot;,
-    &quot;Python.playFile.executor&quot;: &quot;Run&quot;,
-    &quot;Python.scripting.executor&quot;: &quot;Run&quot;,
-    &quot;Python.speechFiler.executor&quot;: &quot;Run&quot;,
-    &quot;Python.testing.executor&quot;: &quot;Run&quot;,
-    &quot;Python.tools.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-<<<<<<< HEAD
-    &quot;last_opened_file_path&quot;: &quot;/home/joseph/Documents/OSU/Senior/Thesis/PythonParser/PythonParser1&quot;,
-=======
-    &quot;last_opened_file_path&quot;: &quot;/home/joseph/Documents/OSU/Senior/Thesis/PythonParser/PythonParser&quot;,
->>>>>>> ca29ac74129ed1e21c10c77b0c054c9f16b75276
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/home/joseph/Documents/OSU/Senior/Thesis/PythonParser/PythonParser2",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/delays" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/Pepper Examples" />
-      <recent name="$PROJECT_DIR$/inputs" />
-      <recent name="$PROJECT_DIR$/outputs" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Python.parser">
-    <configuration name="almotion_poseInit" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="PythonParser" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Pepper Examples/almotion_poseInit.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="parser" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="PythonParser" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/parser.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.almotion_poseInit" />
-      </list>
-    </recent_temporary>
-  </component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -177,77 +95,16 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9ef937e7-e4c6-4368-b81b-cdb7129fe38d" name="Changes" comment="" />
-      <created>1706676929755</created>
+      <changelist id="16209bf3-78c0-41c7-8d16-22b45846e2e5" name="Changes" comment="" />
+      <created>1713573818593</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1706676929755</updated>
-      <workItem from="1706676931161" duration="86000" />
-      <workItem from="1706678276378" duration="19000" />
-      <workItem from="1706678490336" duration="10000" />
-      <workItem from="1706716207057" duration="4462000" />
-      <workItem from="1706721118702" duration="3239000" />
-      <workItem from="1706726400941" duration="7996000" />
-      <workItem from="1706738480475" duration="5157000" />
-      <workItem from="1706815593526" duration="110000" />
-      <workItem from="1707326121179" duration="10308000" />
-      <workItem from="1707345130416" duration="3433000" />
-      <workItem from="1707352308128" duration="7964000" />
-      <workItem from="1707368405712" duration="1244000" />
-      <workItem from="1707945675976" duration="4843000" />
-      <workItem from="1708099467557" duration="6654000" />
-      <workItem from="1708125263508" duration="2771000" />
-      <workItem from="1708135282398" duration="413000" />
-      <workItem from="1708135709496" duration="2494000" />
-      <workItem from="1708554512371" duration="1091000" />
-      <workItem from="1708555687607" duration="4295000" />
-      <workItem from="1708630251731" duration="1154000" />
-      <workItem from="1708993442063" duration="2587000" />
-      <workItem from="1709134529428" duration="22655000" />
-      <workItem from="1709163903546" duration="160000" />
-      <workItem from="1709324405499" duration="788000" />
-      <workItem from="1709674879086" duration="12544000" />
-      <workItem from="1709693561726" duration="5690000" />
-      <workItem from="1709739885830" duration="13997000" />
-      <workItem from="1710347365903" duration="5307000" />
-      <workItem from="1710369093942" duration="56000" />
-      <workItem from="1710369372107" duration="5248000" />
-      <workItem from="1710388362523" duration="9443000" />
-      <workItem from="1712590094442" duration="10792000" />
-      <workItem from="1713192880446" duration="13329000" />
-      <workItem from="1713563448198" duration="90000" />
-<<<<<<< HEAD
-      <workItem from="1713570033122" duration="32000" />
-      <workItem from="1713570104462" duration="6000" />
-=======
->>>>>>> ca29ac74129ed1e21c10c77b0c054c9f16b75276
+      <updated>1713573818593</updated>
+      <workItem from="1713573819641" duration="348000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <ignored-roots>
-      <path value="$PROJECT_DIR$/pepper_robot" />
-    </ignored-roots>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PythonParser$pepperExecute.coverage" NAME="pepperExecute Coverage Results" MODIFIED="1713212435377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$Test.coverage" NAME="Test Coverage Results" MODIFIED="1708556512792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1709145602035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/.local/lib/python2.7/site-packages/speech_recognition" />
-    <SUITE FILE_PATH="coverage/PythonParser$playFile.coverage" NAME="playFile Coverage Results" MODIFIED="1710370820768" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$almotion_stiffnessOff.coverage" NAME="almotion_stiffnessOff Coverage Results" MODIFIED="1708558958819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$tools.coverage" NAME="tools Coverage Results" MODIFIED="1709146851785" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pepper_robot" />
-    <SUITE FILE_PATH="coverage/PythonParser$gesturesConfig.coverage" NAME="gesturesConfig Coverage Results" MODIFIED="1710398703804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$testing.coverage" NAME="testing Coverage Results" MODIFIED="1710369454782" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$speechFiler.coverage" NAME="speechFiler Coverage Results" MODIFIED="1710390726407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$almotion_stiffnessOn.coverage" NAME="almotion_stiffnessOn Coverage Results" MODIFIED="1708558970117" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$scripting.coverage" NAME="scripting Coverage Results" MODIFIED="1710390728555" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$almotion_poseInit.coverage" NAME="almotion_poseInit Coverage Results" MODIFIED="1708556690022" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$albehaviormanager_example.coverage" NAME="albehaviormanager_example Coverage Results" MODIFIED="1708559824772" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$main.coverage" NAME="main Coverage Results" MODIFIED="1713206681357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/main_py$main.coverage" NAME="main Coverage Results" MODIFIED="1708122595189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PythonParser$almotion_poseZero.coverage" NAME="almotion_poseZero Coverage Results" MODIFIED="1708560510432" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

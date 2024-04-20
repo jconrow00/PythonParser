@@ -5,54 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16209bf3-78c0-41c7-8d16-22b45846e2e5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/PythonParser.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PythonParser.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PythonParser1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonParser1.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pepper Examples/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/Pepper Examples/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pepper Examples/albehaviormanager_example.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/Pepper Examples/albehaviormanager_example.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pepper Examples/almotion_poseInit.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/Pepper Examples/almotion_poseInit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pepper Examples/almotion_poseZero.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/Pepper Examples/almotion_poseZero.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/camera_stream.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/camera_stream.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/control.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/dance.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/dance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/build_doc.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/build_doc.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/contacts.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/contacts.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/contribution.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/contribution.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/index.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/installation.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/installation.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/make.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/make.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/pepper_doc.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/pepper_doc.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/docs/publish_docs.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/docs/publish_docs.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/publish_docs.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/publish_docs.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/robot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/robot_teleoperation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/robot_teleoperation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/tablet_stream.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/tablet_stream.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/throw_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/throw_demo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/topics/remote.top" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/topics/remote.top" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepper_robot/topics/remote_commands.top" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepper_robot/topics/remote_commands.top" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/PythonParser2.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PythonParser2/pepperExecute.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PythonParser2/pepperExecute.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,9 +24,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2fLIEREJMVWIYlAlR35zalbSgv8" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -75,7 +37,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/joseph/Documents/OSU/Senior/Thesis/PythonParser/PythonParser2",
+    "last_opened_file_path": "/home/joseph/Documents/OSU/Senior/Thesis/PythonParser",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -101,6 +63,7 @@
       <option name="presentableId" value="Default" />
       <updated>1713573818593</updated>
       <workItem from="1713573819641" duration="348000" />
+      <workItem from="1713574263642" duration="916000" />
     </task>
     <servers />
   </component>

@@ -1,4 +1,4 @@
-def speech_file(mytext="Hello World", output_file="output"):
+def speech_file(mytext="Hello World", output_file="output", voice= "tts_models/en/blizzard2013/capacitron-t2-c50"):
     import torch
     from TTS.api import TTS
 
@@ -9,7 +9,7 @@ def speech_file(mytext="Hello World", output_file="output"):
     print(TTS().list_models())
 
     # Init TTS with the target model name
-    tts = TTS(model_name = "tts_models/en/jenny/jenny", progress_bar=False).to(device)
+    tts = TTS(model_name = voice, progress_bar=False).to(device)
 
     # Run TTS
     tts.tts_to_file(text = mytext, file_path = output_file)

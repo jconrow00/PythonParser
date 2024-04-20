@@ -130,24 +130,18 @@ def main(session):
                 print "hitting line_num=0" #TEMP
                 line_number += 1
                 continue
-            still_waiting = True
-
-            while still_waiting:
-                time.sleep(0.001)
-                current_time += 0.001
-                if current_time >= float(row[0]):
-                    still_waiting = False
-
-            if row[1].find('.wav') != -1: #if current row is a voice file, play sound
-                file_name = '../outputs/line' + str(line_number) + '.wav'
+            print "hitting line_num in loop" #TEMP
+            print "current_time: %f" % current_time #TEMP
+            print "float(row[0]): %f" % float(row[0]) #TEMP
+            file_name = '../outputs/line' + str(line_number) + '.wav'
+            time.sleep(float(row[0]) - current_time)   #delays until the next command
+            if row[1].find('.wav') != -1: #if current row is a voice file
                 call_python_version("3.9", "playFile", "playFile",
                                     ['../outputs/' + row[1], False])      # play the sound before gestures, (True means wait)
-            else:   #if current row is a gesture, play 'init' then gesture, then 'init'
+            else:   #if current row is a gesture
                 behavior_service.runBehavior(get_behavior_name('init'),
                                              _async=False)  # _async is False = wait for finish
                 behavior_service.runBehavior(get_behavior_name(row[1]), _async=False)  # _async is False = wait for finish
-                behavior_service.runBehavior(get_behavior_name('init'),
-                                             _async=False)  # _async is False = wait for finish
             line_number += 1    # line number increment for file name
             current_time += float(row[0])
     behavior_service.runBehavior(get_behavior_name('init'), _async=False)  #    _async is False = wait for finish

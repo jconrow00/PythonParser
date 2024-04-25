@@ -37,7 +37,7 @@ def get_gesture_length(gesture_name):
     elif gesture_name == 'typing':
         return 5.6
     else:
-        return 1.0
+        return 0.0
 
 # RETURNS the pepper stored behavior file from a table according to gesture name
 def get_behavior_name(gesture):
@@ -72,20 +72,20 @@ def get_behavior_name(gesture):
 
 
 def get_voice_name(voice):
-    if voice == "jenny":            #COMMON LADY
+    if voice == 1:            #COMMON LADY
         return "tts_models/en/jenny/jenny"
-    elif voice == "capacitron":     #CREEPY
+    elif voice == 2:     #CREEPY
         return "tts_models/en/blizzard2013/capacitron-t2-c50"
-    # elif voice == "bark":         #BROKEN
-    #     return "tts_models/multilingual/multi-dataset/bark"
-    elif voice == "tacotron":       #OLDER LADY
+    elif voice == 3:       #OLDER LADY
         return "tts_models/en/ljspeech/tacotron2-DDC"
-    elif voice == "glow":           #STUDDRE OLD LADY
+    elif voice == 4:           #STUDDRE OLD LADY
         return "tts_models/en/ljspeech/glow-tts"
-    elif voice == "tacotron2":      #OLDER LADY
+    elif voice == 5:      #OLDER LADY
         return "tts_models/en/ljspeech/tacotron2-DCA"
-    elif voice == "african":           #AFRICAN MAN
+    elif voice == 6:           #AFRICAN MAN
         return "tts_models/yor/openbible/vits"
+        # elif voice == "bark":         #BROKEN
+        #     return "tts_models/multilingual/multi-dataset/bark"
 
     # 14: tts_models / en / ljspeech / speedy - speech
     # 16: tts_models / en / ljspeech / vits

@@ -10,7 +10,7 @@ from mutagen.wave import WAVE
 
 sys.path.insert(1, os.path.realpath(os.path.pardir))
 
-from speechFiler import speech_file
+# from speechFiler import speech_file
 from gesturesConfig import *
 
 import timez
@@ -31,30 +31,46 @@ INPUT_FILE = '../inputs/InputScript3.txt'
 VOICE = 'jenny'     # or 'capacitron' or 'jenny'
 
 
+def speech_file(mytext="Hello World", output_file="output", voice= "tts_models/en/jenny/jenny"):
+    import torch
+    from TTS.api import TTS
+    # Get device
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    # List available 🐸TTS models
+    print(TTS().list_models())
+    # Init TTS with the target model name
+    tts = TTS(model_name = voice, progress_bar=False).to(device)
+    # Run TTS
+    tts.tts_to_file(text = mytext, file_path = output_file)
+
+
 # CLASS that holds the characteristics of a script line
 class ScriptLine:
     def __init__(self, current_timestamp, line="1) Hello #wave World", line_num=1, ):
         # Sets almost all class variables
+        self.line_no = line_num
         self.current_timestamp = current_timestamp
         self.line = line
         self.text = self.extract_text()
         self.voice = self.extract_voice()
         self.gesture_arr = self.extract_gesture()
         self.gesture_pos_arr = self.extract_gesture_pos()
-        self.line_no = line_num
 
         # Outputs sound file
         self.output_file = '../outputs/' + 'line' + str(line_num) + '.wav'
-        speech_file(self.text, self.output_file, get_voice_name(VOICE))
+        speech_file(self.text, self.output_file, get_voice_name(int(self.voice)))
         audio = WAVE(self.output_file)
         self.voice_time = round(audio.info.length, 3)
 
         # Sets gesture_time class variable
-        self.gesture_time = 0
+        self.gesture_time = 0.0
         for i in range(len(self.gesture_arr)):
-            self.gesture_time += round(float(get_gesture_length(self.gesture_arr[i])) + 0.8, 3)  #account for 0.4sec 'init' pos beforehand and after
+            # Error handling for non-gesture
+            if get_gesture_length(self.gesture_arr[i]) == 0.0:
+                print("Unknown gesture\"" + gesture_name + "\" in Line " + str(self.line_no))
+                exit(1)
+            self.gesture_time = round(float(get_gesture_length(self.gesture_arr[i]) + 2 * (get_gesture_length("init"))) + self.gesture_time, 3)  #account for 0.4sec 'init' pos beforehand and after PER gesture in array
 
-        #selects the longest time
         self.total_time = 0.0
 
         self.help_csv()
@@ -110,6 +126,10 @@ class ScriptLine:
             gestures[i] = gestures[i].partition(' ')[0]
             gestures[i] = gestures[i].rstrip('\n ')
             gestures[i] = gestures[i].lstrip('\n ')
+            # Error handling for non_valid chars
+            if gestures[i].isalpha() == 0 and gestures[i].count("_") == 0:
+                print("\033[91mSYNTAX ERROR: Gesture \"" + gestures[i] + "\" in Line " + str(self.line_no) + " contains a non-valid character\033[0m")
+                exit(1)
         return gestures
 
     # RETURNS an array gesture position from the line
@@ -119,40 +139,61 @@ class ScriptLine:
             pos_arr[i] = self.line.find(self.gesture_arr[i]) - 4 - i   # remove 3 positions
                                                                     # for the voice spacer
                                                                     # and 1 for the '#' sign
-            # print (pos_arr[i])      # TEMP
+            # print (pos_arr[i])                                                # TEMP
         return pos_arr
 
     # OUTPUTS one csv file in the /output folder with the timestamps for the voices and gestures
     def help_csv(self):
         with open("../outputs/commandFile.csv", 'a+') as file:
             file_writer = csv.writer(file)
-            #adds the voice at current time stamp
+            # adds the voice at current time stamp
             file_writer.writerow([self.current_timestamp, self.output_file.partition('/')[2].partition('/')[2]])    #removes 'outputs/' and adds voice timeline
 
-            #adds the gesture positions in at correct times
+            # adds the gesture positions in at correct times
+            total_delay = 0.0
             last_pos_ratio = 0.0
             last_gesture_timestamp = 0.0
             last_gesture_delay = 0.0
             last_gesture_length = 0.0
-            delay = 0.0
+            last_delay_from_timestamp = 0.0
             for i in range(len(self.gesture_arr)):
                 position_ratio = float(self.gesture_pos_arr[i]) / len(self.line)  # gets the fractional position
-                delay = (position_ratio - last_pos_ratio) * self.voice_time
-                timestamp = round(self.current_timestamp + delay, 3)
-                #compares to see if relative sentance position is too close to previous gesture (overlapping)
+                delay_from_timestamp = round((position_ratio - last_pos_ratio) * self.voice_time, 3)
+                timestamp = round(self.current_timestamp + delay_from_timestamp, 3)
+                gesture_length = round(get_gesture_length(self.gesture_arr[i]) + 2 * get_gesture_length("init"), 3)  # account for 0.4sec 'init' pos beforehand and after
+                # compares to see if relative sentance position is too close to previous gesture (overlapping)
                 if timestamp < last_gesture_timestamp + last_gesture_length:
                     timestamp = round(last_gesture_timestamp + last_gesture_length, 3)
                 file_writer.writerow([timestamp, self.gesture_arr[i]])
-                last_pos_ratio = position_ratio  # saves last position ratio
+                delay_between_gestures = last_gesture_delay + last_delay_from_timestamp
+                # prevent negative delay to contributing to total delay
+                if delay_between_gestures > 0:
+                    total_delay = round(delay_between_gestures + total_delay, 3)
+                # print("\033[95m-------Gesture---\"" + self.gesture_arr[i] + "\"------------------------")   # TEMP
+                # print("gesture length:" + str(gesture_length))                                  # TEMP
+                # print("gesture delay:" + str(delay_between_gestures))                           # TEMP
+                # print("timestamp:" + str(timestamp))                                            # TEMP
+                # print("---")                                                                    # TEMP
+                # print("last length:" + str(last_gesture_length))                                # TEMP
+                # print("last delay:" + str(last_gesture_delay))                                  # TEMP
+                # print("last timestamp:" + str(last_gesture_timestamp))                          # TEMP
+                # print("---")                                                                    # TEMP
+                # print("total delay:" + str(total_delay))                                        # TEMP
+                # print("total gesture time:" + str(self.gesture_time))                           # TEMP
+                # print("-----------------------------------------------")                        # TEMP
+                # saves last gesture values
+                last_pos_ratio = position_ratio
                 last_gesture_timestamp = timestamp
-                last_gesture_delay = delay
-                last_gesture_length = get_gesture_length(self.gesture_arr[i])
-
-            #adds to the ongoing current timestamp for the next line
-            if self.gesture_time + delay > self.voice_time:
-                self.total_time += round(self.gesture_time + delay, 3)
+                last_gesture_delay = delay_between_gestures
+                last_gesture_length = gesture_length
+                last_delay_from_timestamp = delay_from_timestamp
+            # adds to the ongoing current timestamp for the next line
+            if self.gesture_time + total_delay > self.voice_time:
+                self.total_time = round(self.gesture_time + total_delay, 3)
+                # print("(1) Total time:" + str(self.total_time))                                 # TEMP
             else:
-                self.total_time += self.voice_time
+                self.total_time = round(self.voice_time + self.total_time, 3)
+                # print("(2) Total time:" + str(self.total_time) + "\033[0m")                                 # TEMP
             self.current_timestamp = round(self.total_time, 3)
 
 # CLEARS out the output files from previous run
@@ -180,11 +221,12 @@ def main():
         line_number = fileinput.lineno()
 
 
-
+        # print("\033[95mCurrent Timestamp:" + str(ongoing_length) + "\033[0m")                   #TEMP
         testing_class = ScriptLine(ongoing_length, line, line_number)
 
         # adds the line length to the onging total length
         ongoing_length += testing_class.total_time
+        # print("\033[95mongoing_length:" + str(ongoing_length) + "\033[0m")                      #TEMP
         print(testing_class)
 
 
@@ -198,10 +240,10 @@ def main():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    # speech_file("yoooo hooooo bababooie", "../outputs/bababooie.wav")     #temp
-    # audio = WAVE("../outputs/bababooie.wav")      #temp
-    # playtime = audio.info.length      #temp
-    # print("playtime: ", playtime)     #temp
+    # speech_file("yoooo hooooo bababooie", "../outputs/bababooie.wav")     # TEMP
+    # audio = WAVE("../outputs/bababooie.wav")                              # TEMP
+    # playtime = audio.info.length                                          # TEMP
+    # print("playtime: ", playtime)                                         # TEMP
     main()
 
 

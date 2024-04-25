@@ -1,15 +1,9 @@
 from __future__ import print_function
-import sys
-import fileinput
-import decimal
 import fileinput
 import csv
-import os
 from mutagen.wave import WAVE
 from speechFiler import speech_file
 from gesturesConfig import *
-import time
-from contextlib import closing
 import execnet
 
 # import urllib3.contrib.pyopenssl

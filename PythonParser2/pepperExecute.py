@@ -2,22 +2,14 @@ import time
 # from pepper_robot.robot import *
 # import pepper_robot.config
 import qi
-import naoqi
 import sys
-import fileinput
 import csv
 import execnet
 import os
-from threading import Thread
+# import playsound
+
 
 sys.path.insert(1, os.path.realpath(os.path.pardir))
-from gesturesConfig import *
-from playFile import *
-
-PEPPER_IP = '192.168.50.155'
-PEPPER_PORT = 9559
-# PEPPER_IP = 'localhost'
-# PEPPER_PORT = 36595     #37689     #45285
 
 def call_python_version(Version, Module, Function, ArgumentList):
     gw = execnet.makegateway("popen//python=python%s" % Version)
@@ -28,6 +20,11 @@ def call_python_version(Version, Module, Function, ArgumentList):
     channel.send(ArgumentList)
     return channel.receive()
 
+from gesturesConfig import *
+# from playFile import *
+
+# to find PEPPER_IP & PEPPER_PORT
+from config import *
 
 def run_behavior(ip, port, behavior_name):
     sesh = qi.Session()
@@ -135,15 +132,12 @@ def main(session):
                 current_time += 0.001
 
             if row[1].find('.wav') != -1: #if current row is a voice file, play sound
-                file_name = '../outputs/line' + str(line_number) + '.wav'
-                call_python_version("3.9", "playFile", "playFile",
-                                    ['../outputs/' + row[1], False])      # play the sound before gestures, (True means wait)
+                file_name = '../outputs/' + row[1]
+                call_python_version("3.9", "playFile", "play", [file_name, False])      # play the sound before gestures, (True means wait)
             else:   #if current row is a gesture, play 'init' then gesture, then 'init'
-                behavior_service.runBehavior(get_behavior_name('init'),
-                                             _async=False)  # _async is False = wait for finish
+                behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
                 behavior_service.runBehavior(get_behavior_name(row[1]), _async=False)  # _async is False = wait for finish
-                behavior_service.runBehavior(get_behavior_name('init'),
-                                             _async=False)  # _async is False = wait for finish
+                behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
                 current_time += get_gesture_length(row[1])
             line_number += 1    # line number increment for file name
     behavior_service.runBehavior(get_behavior_name('init'), _async=False)  #    _async is False = wait for finish

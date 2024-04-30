@@ -10,8 +10,9 @@ from mutagen.wave import WAVE
 
 sys.path.insert(1, os.path.realpath(os.path.pardir))
 
-# from speechFiler import speech_file
 from gesturesConfig import *
+# to find INPUT_FILE
+from config import *
 
 import timez
 from contextlib import closing
@@ -27,11 +28,9 @@ import execnet
 # urllib3.contrib.pyopenssl.inject_into_urllib3()
 
 
-INPUT_FILE = '../inputs/InputScript3.txt'
-VOICE = 'jenny'     # or 'capacitron' or 'jenny'
 
 
-def speech_file(mytext="Hello World", output_file="output", voice= "tts_models/en/jenny/jenny"):
+def speech_file(mytext="Hello World", output_file="output", voice= "tts_models/en/jenny/jenny", chosen_language = None, chosen_speaker = None):
     import torch
     from TTS.api import TTS
     # Get device
@@ -41,7 +40,7 @@ def speech_file(mytext="Hello World", output_file="output", voice= "tts_models/e
     # Init TTS with the target model name
     tts = TTS(model_name = voice, progress_bar=False).to(device)
     # Run TTS
-    tts.tts_to_file(text = mytext, file_path = output_file)
+    tts.tts_to_file(text=mytext, file_path=output_file, language=chosen_language, speaker=chosen_speaker)
 
 
 # CLASS that holds the characteristics of a script line
@@ -56,20 +55,44 @@ class ScriptLine:
         self.gesture_arr = self.extract_gesture()
         self.gesture_pos_arr = self.extract_gesture_pos()
 
-        # Outputs sound file
-        self.output_file = '../outputs/' + 'line' + str(line_num) + '.wav'
-        speech_file(self.text, self.output_file, get_voice_name(int(self.voice)))
-        audio = WAVE(self.output_file)
-        self.voice_time = round(audio.info.length, 3)
+        # Outputs sound file if NOT '0' (human)
+        if self.voice != '0':
+            self.output_file = '../outputs/' + 'line' + str(line_num) + '.wav'
+            # if no voice for this line
+            if self.text:
+                speech_file(self.text, self.output_file, get_voice_name(int(self.voice)))
+                # Get audio length
+                audio = WAVE(self.output_file)
+                self.voice_time = round(audio.info.length, 3)
+            else:
+                # Creates an empty file
+                with open(self.output_file, 'w') as fp:
+                    pass
+                self.voice_time = 0.0
 
-        # Sets gesture_time class variable
-        self.gesture_time = 0.0
-        for i in range(len(self.gesture_arr)):
-            # Error handling for non-gesture
-            if get_gesture_length(self.gesture_arr[i]) == 0.0:
-                print("Unknown gesture\"" + gesture_name + "\" in Line " + str(self.line_no))
-                exit(1)
-            self.gesture_time = round(float(get_gesture_length(self.gesture_arr[i]) + 2 * (get_gesture_length("init"))) + self.gesture_time, 3)  #account for 0.4sec 'init' pos beforehand and after PER gesture in array
+            # Sets gesture_time class variable
+            self.gesture_time = 0.0
+            for i in range(len(self.gesture_arr)):
+                # Error handling for non-gesture
+                if get_gesture_length(self.gesture_arr[i]) == 0.0:
+                    print("\033[91mUnknown gesture \"" + self.gesture_arr[i] + "\" in Line " + str(self.line_no) + "\033[0m")
+                    exit(1)
+                self.gesture_time = round(float(
+                    get_gesture_length(self.gesture_arr[i]) + 2 * (get_gesture_length("init"))) + self.gesture_time, 3)  # account for 0.4sec 'init' pos beforehand and after PER gesture in array
+
+            #fills human out
+            # put file with spacers
+            with open('../outputs/' + 'lines(human).txt', "a") as myfile:
+                myfile.write('\trobot: ' + self.line)
+        # If '0' (human)
+        else:
+            self.output_file = '../outputs/' + 'lines(human).txt'
+            with open(self.output_file, "a") as myfile:
+                myfile.write('line' + str(self.line_no) + ': ' + self.line)
+            # based on 130 WPM speech
+            self.voice_time = round(float(self.text.count(' ')) * 60.00 / 130.00, 3)
+            # gesture length assumed to exactly fit in the length of speech
+            self.gesture_time = self.voice_time
 
         self.total_time = 0.0
 
@@ -127,7 +150,7 @@ class ScriptLine:
             gestures[i] = gestures[i].rstrip('\n ')
             gestures[i] = gestures[i].lstrip('\n ')
             # Error handling for non_valid chars
-            if gestures[i].isalpha() == 0 and gestures[i].count("_") == 0:
+            if not gestures[i].isalnum() and gestures[i].count("_") == 0:
                 print("\033[91mSYNTAX ERROR: Gesture \"" + gestures[i] + "\" in Line " + str(self.line_no) + " contains a non-valid character\033[0m")
                 exit(1)
         return gestures
@@ -200,10 +223,14 @@ class ScriptLine:
 def clear_csv():
     with open("../outputs/commandFile.csv", "w") as t:
         t.truncate()
+    with open("../outputs/lines(human).txt", "w") as t:
+        t.truncate()
     # adds header
     with open("../outputs/commandFile.csv", 'a+') as file:
         file_writer = csv.writer(file)
-        file_writer.writerow(['timestamp', 'action', '(voice)', '(speed)'])
+        file_writer.writerow(['timestamp', 'action'])
+        # file_writer.writerow(['timestamp', 'action', '(voice)', '(speed)'])       #TEMP
+    os.system("rm ../outputs/line*")
 
 
 def main():
@@ -225,7 +252,7 @@ def main():
         testing_class = ScriptLine(ongoing_length, line, line_number)
 
         # adds the line length to the onging total length
-        ongoing_length += testing_class.total_time
+        ongoing_length = round(testing_class.total_time + ongoing_length, 3)
         # print("\033[95mongoing_length:" + str(ongoing_length) + "\033[0m")                      #TEMP
         print(testing_class)
 
@@ -244,6 +271,7 @@ if __name__ == '__main__':
     # audio = WAVE("../outputs/bababooie.wav")                              # TEMP
     # playtime = audio.info.length                                          # TEMP
     # print("playtime: ", playtime)                                         # TEMP
+
     main()
 
 

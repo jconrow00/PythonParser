@@ -2,17 +2,13 @@ import time
 # from pepper_robot.robot import *
 # import pepper_robot.config
 import qi
-import naoqi
 import sys
-import fileinput
 import csv
 import execnet
 import os
-from threading import Thread
 
 sys.path.insert(1, os.path.realpath(os.path.pardir))
 from gesturesConfig import *
-from playFile import *
 
 # PEPPER_IP = '192.168.50.155'
 # PEPPER_PORT = 9559

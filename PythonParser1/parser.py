@@ -7,26 +7,16 @@ import csv
 import os
 import inspect
 from mutagen.wave import WAVE
+import timez
+from contextlib import closing
+import execnet
 
+# This makes "import ..." commands search in the upper directory
 sys.path.insert(1, os.path.realpath(os.path.pardir))
 
 from gesturesConfig import *
 # to find INPUT_FILE
 from config import *
-
-import timez
-from contextlib import closing
-import execnet
-
-# import urllib3.contrib.pyopenssl
-# import certifi
-# import urllib3
-# http = urllib3.PoolManager(
-#     cert_reqs='CERT_REQUIRED',
-#     ca_certs=certifi.where()
-# )
-# urllib3.contrib.pyopenssl.inject_into_urllib3()
-
 
 
 
@@ -80,8 +70,7 @@ class ScriptLine:
                 self.gesture_time = round(float(get_gesture_length(self.gesture_arr[i])) + self.gesture_time, 3)
                 # self.gesture_time = round(float(get_gesture_length(self.gesture_arr[i]) + 2 * (get_gesture_length("init"))) + self.gesture_time, 3)  # account for 0.4sec 'init' pos beforehand and after PER gesture in array
 
-
-            #fills human out
+            # Fills human text output
             # put file with spacers
             with open('../outputs/' + 'lines(human).txt', "a") as myfile:
                 myfile.write('\trobot: ' + self.line)
@@ -94,12 +83,12 @@ class ScriptLine:
             self.voice_time = round(float(self.text.count(' ')) * 60.00 / 130.00, 3)
             # gesture length assumed to exactly fit in the length of speech
             self.gesture_time = self.voice_time
-
+        # Initializes the total running time of this line
         self.total_time = 0.0
-
+        # Heavy lifting of the parsing
         self.help_csv()
 
-
+    # Formats the printing output of this class
     def __str__(self):
         string = ('\033[94mPlaytime / Gesturetime: {} / {} \033[0m| \033[91mVoice: {} \033[0m|'
                   ' \033[92mText: "{}" \033[0m| \033[93mGestures: '
@@ -115,18 +104,18 @@ class ScriptLine:
 
     # RETURNS the text element string from script line
     def extract_text(self):
-        # get rid of the "person" syntax
+        # Get rid of the "person" syntax
         liner = self.line
         liner = liner.partition(')')[2]
         gesture_count = liner.count('#')
-        # initialize empty line to build
+        # Initialize empty line to build
         text = ""
         for i in range(gesture_count + 1):
-            # adds the text to the left of the leftmost gesture
+            # Adds the text to the left of the leftmost gesture
             text += liner.partition('#')[0]
-            # updates the running line to remove up to the leftmost gesture
+            # Updates the running line to remove up to the leftmost gesture
             liner = liner.partition('#')[2]
-            # updates the running line to remove the leftmost gesture
+            # Updates the running line to remove the leftmost gesture
             liner = liner.partition(' ')[2]
         text = text.rstrip('\n ')
         text = text.lstrip('\n ')
@@ -160,10 +149,8 @@ class ScriptLine:
     def extract_gesture_pos(self):
         pos_arr = [-1] * len(self.gesture_arr)
         for i in range(len(self.gesture_arr)):
-            pos_arr[i] = self.line.find(self.gesture_arr[i]) - 4 - i   # remove 3 positions
-                                                                    # for the voice spacer
-                                                                    # and 1 for the '#' sign
-            # print (pos_arr[i])                                                # TEMP
+            # remove 3 positions for the voice spacer and 1 for the '#' sign
+            pos_arr[i] = self.line.find(self.gesture_arr[i]) - 4 - i
         return pos_arr
 
     # OUTPUTS one csv file in the /output folder with the timestamps for the voices and gestures
@@ -181,14 +168,19 @@ class ScriptLine:
             last_gesture_length = 0.0
             last_delay_from_timestamp = 0.0
             for i in range(len(self.gesture_arr)):
-                position_ratio = float(self.gesture_pos_arr[i]) / len(self.line)  # gets the fractional position
+                # gets the fractional position
+                position_ratio = float(self.gesture_pos_arr[i]) / len(self.line)
+                # finds the time delay from the references timestamp of the line
                 delay_from_timestamp = round((position_ratio - last_pos_ratio) * self.voice_time, 3)
+                # sets the relative time at which to play the gesture
                 timestamp = round(self.current_timestamp + delay_from_timestamp, 3)
+                # sets the time the gesture takes to execute
                 gesture_length = round(get_gesture_length(self.gesture_arr[i]), 3)
-                # gesture_length = round(get_gesture_length(self.gesture_arr[i]) + 2 * get_gesture_length("init"), 3)  # account for 0.4sec 'init' pos beforehand and after
-                # compares to see if relative sentance position is too close to previous gesture (overlapping)
+                # compares to see if relative sentence position is too close to previous gesture (overlapping)
                 if timestamp < last_gesture_timestamp + last_gesture_length:
+                    # then play at the timestamp directly after previous gesture finishes
                     timestamp = round(last_gesture_timestamp + last_gesture_length, 3)
+                # write this time and this gesture to the ,csv
                 file_writer.writerow([timestamp, self.gesture_arr[i]])
                 delay_between_gestures = last_gesture_delay + last_delay_from_timestamp
                 # prevent negative delay to contributing to total delay
@@ -214,94 +206,57 @@ class ScriptLine:
                 last_delay_from_timestamp = delay_from_timestamp
             # adds to the ongoing current timestamp for the next line
             if self.gesture_time + total_delay > self.voice_time:
+                # adds gesture time and delays to total line time if gesture time is longer than voice
                 self.total_time = round(self.gesture_time + total_delay, 3)
-                # print("(1) Total time:" + str(self.total_time))                                 # TEMP
             else:
+                # adds voice time to total line time if voice time is longer than gesture and delays
                 self.total_time = round(self.voice_time + self.total_time, 3)
-                # print("(2) Total time:" + str(self.total_time) + "\033[0m")                                 # TEMP
+            # adds the time for the robot to "init" behavior at the end of a line
             self.total_time = round(self.total_time + get_gesture_length("init"), 3)
+            # updates current_timestamp for the sake of the next line's reference
             self.current_timestamp = round(self.total_time, 3)
 
 # CLEARS out the output files from previous run
 def clear_csv():
+    # clears commandFile.csv
     with open("../outputs/commandFile.csv", "w") as t:
         t.truncate()
+    # clears lines(human).txt
     with open("../outputs/lines(human).txt", "w") as t:
         t.truncate()
+    # clears line[1, 2, ...].wav
+    os.system("rm ../outputs/line*")
     # adds header
     with open("../outputs/commandFile.csv", 'a+') as file:
         file_writer = csv.writer(file)
         file_writer.writerow(['timestamp', 'action'])
-        # file_writer.writerow(['timestamp', 'action', '(voice)', '(speed)'])       #TEMP
-    os.system("rm ../outputs/line*")
 
 
 def main():
+    # setsup output files
     clear_csv()
     # receive text input from script file
     input_script = fileinput.input(files=INPUT_FILE)
-    # # open file
-    # fp = open(INPUT_FILE, 'r')
-    # lines = len(fp.readlines())
-    # line_results = [lines]
-    # fp.close()
+    # running time
     ongoing_length = 0.0
     for line in input_script:
         # Extract line to class
         line_number = fileinput.lineno()
 
-
-        # print("\033[95mCurrent Timestamp:" + str(ongoing_length) + "\033[0m")                   #TEMP
-        testing_class = ScriptLine(ongoing_length, line, line_number)
+        # creates a script line class
+        line_class = ScriptLine(ongoing_length, line, line_number)
 
         # adds the line length to the onging total length
-        ongoing_length = round(testing_class.total_time + ongoing_length, 3)
+        ongoing_length = round(line_class.total_time + ongoing_length, 3)
         # print("\033[95mongoing_length:" + str(ongoing_length) + "\033[0m")                      #TEMP
-        print(testing_class)
-
-
-        # #
-        # gestures_take_longer = is_gestures_longer(gestures_arr, playtime)
-        # csv_handling(gestures_arr, gestures_take_longer, playtime)
-
+        print(line_class)
 
     fileinput.close()
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    # speech_file("yoooo hooooo bababooie", "../outputs/bababooie.wav")     # TEMP
-    # audio = WAVE("../outputs/bababooie.wav")                              # TEMP
-    # playtime = audio.info.length                                          # TEMP
-    # print("playtime: ", playtime)                                         # TEMP
-
     main()
-
-
-# def check_speed(line_number, line):
-#    # extracts the speed number (1-5) before the '#'
-#    line_speed = line.partition('#')[0]
-#    # checks if the speed number is valid, else error
-#    if not line_speed.isdigit():
-#        print(f"\033[1:91mIn Script line({line_number}): speed (prior to '#') is snot a positive integer\033[0m")
-#        exit(1)
-#    else:
-#        line_speed = int(line_speed)
-#    if line_speed < 1 or line_speed > 5:
-#        print(f"\033[1:91mIn Script line({line_number}): speed out of range: {line_speed}\033[0m")
-#        exit(1)
-#    return line_speed
-
-
-# Press Shiffor line in fileinput.input(encoding="utf-8"):
-# t+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-#import torch
-#from transformers import pipeline, DistilBertTokenizer, DistilBertForSequenceClassification, TextClassificationPipeline
-
-
-#model_id = "lxyuan/distilbert-base-multilingual-cased-sentiments-student"
 
 
 #def analyze_sentiment(text):

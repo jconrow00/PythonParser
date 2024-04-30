@@ -8,9 +8,10 @@ import execnet
 import os
 # import playsound
 
-
+# This makes "import ..." commands search in the upper directory
 sys.path.insert(1, os.path.realpath(os.path.pardir))
 
+# calls a python module and function with a specific version
 def call_python_version(Version, Module, Function, ArgumentList):
     gw = execnet.makegateway("popen//python=python%s" % Version)
     channel = gw.remote_exec("""
@@ -26,6 +27,7 @@ from gesturesConfig import *
 # to find PEPPER_IP & PEPPER_PORT
 from config import *
 
+# unused useful reference from http://doc.aldebaran.com/2-5/index_dev_guide.html
 def run_behavior(ip, port, behavior_name):
     sesh = qi.Session()
     try:
@@ -42,6 +44,7 @@ def run_behavior(ip, port, behavior_name):
     defaultBehaviors(behavior_mng_service, behavior_name)
 
 
+# unused useful reference from http://doc.aldebaran.com/2-5/index_dev_guide.html
 def getBehaviors(behavior_mng_service):
     """
     Know which behaviors are on the robot.
@@ -54,6 +57,7 @@ def getBehaviors(behavior_mng_service):
     print (names)
 
 
+# unused useful reference from http://doc.aldebaran.com/2-5/index_dev_guide.html
 def launchAndStopBehavior(behavior_mng_service, behavior_name):
     """
     Launch and stop a behavior, if possible.
@@ -86,6 +90,7 @@ def launchAndStopBehavior(behavior_mng_service, behavior_name):
     print (names)
 
 
+# unused useful reference from http://doc.aldebaran.com/2-5/index_dev_guide.html
 def defaultBehaviors(behavior_mng_service, behavior_name):
     """
     Set a behavior as default and remove it from default behavior.
@@ -107,47 +112,50 @@ def defaultBehaviors(behavior_mng_service, behavior_name):
 
 
 def main(session):
-    # setup CIIRC Pepper API qi wrapper
-    # pepper = Pepper(PEPPER_IP, PEPPER_PORT)
-
+    # Start a session
     behavior_service = session.service("ALBehaviorManager")
     audio_player_service = session.service("ALAudioPlayer")
-    # behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
 
-    # print "in main"  # TEMP
-
-    init_time = time.time()     #TEMP
+    # Sets runtime unix time reference
+    init_time = time.time()
+    # Open commandFile.csv to read commands line by line
     with open("../outputs/commandFile.csv", 'r') as file:
         file_reader = csv.reader(file)
-        line_number = 0     # line number incrementer for file name
+        # line number incrementer for file name
+        line_number = 0
+        # to track current time to align actions with time
         current_time = 0.0
-        # print "before file reader" # TEMP
-        behavior_service.runBehavior(get_behavior_name('init'),_async=False)  # _async is False = wait for finish
-        for row in file_reader:   # for each script line
-            if line_number == 0: #skips the header row of csv
+        # calls first "init" during the start of the routine
+        behavior_service.runBehavior(get_behavior_name('init'),_async=False)
+        # for each script line
+        for row in file_reader:
+            # skips the header row of csv
+            if line_number == 0:
                 line_number += 1
                 continue
-
+            # waits until the time from runtime start matches the timeline command time
             while current_time < float(row[0]):
                 current_time = time.time() - init_time
-                # print("Current time: " + str(current_time))     # TEMP
 
-            if row[1].find('.wav') != -1: #if current row is a voice file, play sound
-                behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
+            # if current row is a voice file, play sound
+            if row[1].find('.wav') != -1:
+                behavior_service.runBehavior(get_behavior_name('init'), _async=False)
+                # find target .wav file
                 file_name = '../outputs/' + row[1]
-                # print("Current Time: " + str(current_time) + "\tFile Name: " + str(file_name))      #TEMP
-                call_python_version("3.9", "playFile", "play", [file_name, False])      # play the sound before gestures, (True means wait)
-            else:   #if current row is a gesture, play 'init' then gesture, then 'init'
-                # behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
+                # plays the file in newer python version (for library reason)
+                call_python_version("3.9", "playFile", "play", [file_name, False])
+            # if current row is a gesture, play gesture
+            else:
                 behavior_service.runBehavior(get_behavior_name(row[1]), _async=False)  # _async is False = wait for finish
-                # behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
-                # current_time += get_gesture_length(row[1])
-            line_number += 1    # line number increment for file name
-    behavior_service.runBehavior(get_behavior_name('init'), _async=False)  #    _async is False = wait for finish
+            # line number increment for .csv reading
+            line_number += 1
+            # calls the "init" behavior at the end of the line to reset between speakers or such
+            behavior_service.runBehavior(get_behavior_name('init'), _async=False)  #    _async is False = wait for finish
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    # create pepper session connection with error handling
     session = qi.Session()
     try:
         session.connect("tcp://" + PEPPER_IP + ":" + str(PEPPER_PORT))

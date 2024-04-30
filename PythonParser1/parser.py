@@ -77,8 +77,9 @@ class ScriptLine:
                 if get_gesture_length(self.gesture_arr[i]) == 0.0:
                     print("\033[91mUnknown gesture \"" + self.gesture_arr[i] + "\" in Line " + str(self.line_no) + "\033[0m")
                     exit(1)
-                self.gesture_time = round(float(
-                    get_gesture_length(self.gesture_arr[i]) + 2 * (get_gesture_length("init"))) + self.gesture_time, 3)  # account for 0.4sec 'init' pos beforehand and after PER gesture in array
+                self.gesture_time = round(float(get_gesture_length(self.gesture_arr[i])) + self.gesture_time, 3)
+                # self.gesture_time = round(float(get_gesture_length(self.gesture_arr[i]) + 2 * (get_gesture_length("init"))) + self.gesture_time, 3)  # account for 0.4sec 'init' pos beforehand and after PER gesture in array
+
 
             #fills human out
             # put file with spacers
@@ -183,7 +184,8 @@ class ScriptLine:
                 position_ratio = float(self.gesture_pos_arr[i]) / len(self.line)  # gets the fractional position
                 delay_from_timestamp = round((position_ratio - last_pos_ratio) * self.voice_time, 3)
                 timestamp = round(self.current_timestamp + delay_from_timestamp, 3)
-                gesture_length = round(get_gesture_length(self.gesture_arr[i]) + 2 * get_gesture_length("init"), 3)  # account for 0.4sec 'init' pos beforehand and after
+                gesture_length = round(get_gesture_length(self.gesture_arr[i]), 3)
+                # gesture_length = round(get_gesture_length(self.gesture_arr[i]) + 2 * get_gesture_length("init"), 3)  # account for 0.4sec 'init' pos beforehand and after
                 # compares to see if relative sentance position is too close to previous gesture (overlapping)
                 if timestamp < last_gesture_timestamp + last_gesture_length:
                     timestamp = round(last_gesture_timestamp + last_gesture_length, 3)
@@ -217,6 +219,7 @@ class ScriptLine:
             else:
                 self.total_time = round(self.voice_time + self.total_time, 3)
                 # print("(2) Total time:" + str(self.total_time) + "\033[0m")                                 # TEMP
+            self.total_time = round(self.total_time + get_gesture_length("init"), 3)
             self.current_timestamp = round(self.total_time, 3)
 
 # CLEARS out the output files from previous run

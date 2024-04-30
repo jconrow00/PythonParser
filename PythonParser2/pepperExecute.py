@@ -112,33 +112,36 @@ def main(session):
 
     behavior_service = session.service("ALBehaviorManager")
     audio_player_service = session.service("ALAudioPlayer")
-    behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
+    # behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
 
     # print "in main"  # TEMP
+
+    init_time = time.time()     #TEMP
     with open("../outputs/commandFile.csv", 'r') as file:
         file_reader = csv.reader(file)
         line_number = 0     # line number incrementer for file name
         current_time = 0.0
         # print "before file reader" # TEMP
-        behavior_service.runBehavior(get_behavior_name('init'),
-                                     _async=False)  # _async is False = wait for finish
+        behavior_service.runBehavior(get_behavior_name('init'),_async=False)  # _async is False = wait for finish
         for row in file_reader:   # for each script line
             if line_number == 0: #skips the header row of csv
                 line_number += 1
                 continue
 
             while current_time < float(row[0]):
-                time.sleep(0.001)
-                current_time += 0.001
+                current_time = time.time() - init_time
+                # print("Current time: " + str(current_time))     # TEMP
 
             if row[1].find('.wav') != -1: #if current row is a voice file, play sound
+                behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
                 file_name = '../outputs/' + row[1]
+                # print("Current Time: " + str(current_time) + "\tFile Name: " + str(file_name))      #TEMP
                 call_python_version("3.9", "playFile", "play", [file_name, False])      # play the sound before gestures, (True means wait)
             else:   #if current row is a gesture, play 'init' then gesture, then 'init'
-                behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
+                # behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
                 behavior_service.runBehavior(get_behavior_name(row[1]), _async=False)  # _async is False = wait for finish
-                behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
-                current_time += get_gesture_length(row[1])
+                # behavior_service.runBehavior(get_behavior_name('init'), _async=False)  # _async is False = wait for finish
+                # current_time += get_gesture_length(row[1])
             line_number += 1    # line number increment for file name
     behavior_service.runBehavior(get_behavior_name('init'), _async=False)  #    _async is False = wait for finish
 

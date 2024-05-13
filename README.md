@@ -1,6 +1,6 @@
 # Script-to-Pepper PythonAnimator
 
-HonorsThesis
+Joseph Conrow's HonorsThesis
 
 ## Setup
 

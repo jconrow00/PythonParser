@@ -9,7 +9,6 @@
 0) #skeptical Can meditation solve quadratic equations?
 1) It can't hurt. #wink Let's give your brain a breather. Close your eyes...
 0) #close_eyes
-1) calming_sond.wav
 1) Breathe in success. #wait5
 1) Breathe out stress. #wait5
 1) Remember, success is the journey, not just the finish line.

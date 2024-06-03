@@ -7,7 +7,7 @@ import csv
 import os
 import inspect
 from mutagen.wave import WAVE
-import timez
+import time
 from contextlib import closing
 import execnet
 
@@ -17,7 +17,6 @@ sys.path.insert(1, os.path.realpath(os.path.pardir))
 from gesturesConfig import *
 # to find INPUT_FILE
 from config import *
-
 
 
 def speech_file(mytext="Hello World", output_file="output", voice= "tts_models/en/jenny/jenny", chosen_language = None, chosen_speaker = None):
@@ -30,7 +29,7 @@ def speech_file(mytext="Hello World", output_file="output", voice= "tts_models/e
     # Init TTS with the target model name
     tts = TTS(model_name = voice, progress_bar=False).to(device)
     # Run TTS
-    tts.tts_to_file(text=mytext, file_path=output_file, language=chosen_language, speaker=chosen_speaker)
+    tts.tts_to_file(text=mytext, file_path=output_file, language=chosen_language, speaker_wav=chosen_speaker, split_sentences=False)
 
 
 # CLASS that holds the characteristics of a script line
@@ -45,12 +44,12 @@ class ScriptLine:
         self.gesture_arr = self.extract_gesture()
         self.gesture_pos_arr = self.extract_gesture_pos()
 
-        # Outputs sound file if NOT '0' (human)
+        # Outputs sound file if NOT '0' (if is robot)
         if self.voice != '0':
             self.output_file = '../outputs/' + 'line' + str(line_num) + '.wav'
             # if no voice for this line
             if self.text:
-                speech_file(self.text, self.output_file, get_voice_name(int(self.voice)))
+                speech_file(self.text, self.output_file, get_voice_name(int(self.voice)), get_voice_language(int(self.voice)), SPEAKER_WAV)
                 # Get audio length
                 audio = WAVE(self.output_file)
                 self.voice_time = round(audio.info.length, 3)
@@ -68,13 +67,12 @@ class ScriptLine:
                     print("\033[91mUnknown gesture \"" + self.gesture_arr[i] + "\" in Line " + str(self.line_no) + "\033[0m")
                     exit(1)
                 self.gesture_time = round(float(get_gesture_length(self.gesture_arr[i])) + self.gesture_time, 3)
-                # self.gesture_time = round(float(get_gesture_length(self.gesture_arr[i]) + 2 * (get_gesture_length("init"))) + self.gesture_time, 3)  # account for 0.4sec 'init' pos beforehand and after PER gesture in array
 
             # Fills human text output
             # put file with spacers
             with open('../outputs/' + 'lines(human).txt', "a") as myfile:
                 myfile.write('\trobot: ' + self.line)
-        # If '0' (human)
+        # If '0' (if human)
         else:
             self.output_file = '../outputs/' + 'lines(human).txt'
             with open(self.output_file, "a") as myfile:

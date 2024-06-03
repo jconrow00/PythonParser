@@ -17,7 +17,7 @@ def get_gesture_length(gesture_name):
     elif gesture_name == 'wave':
         return 4.2
     elif gesture_name == 'shocked':
-        return 2.2
+        return 4.0
     elif gesture_name == 'scared':
         return 2.4
     elif gesture_name == 'talk1':
@@ -27,13 +27,13 @@ def get_gesture_length(gesture_name):
     elif gesture_name == 'display_right':
         return 2.0
     elif gesture_name == 'plane':
-        return 6.0
+        return 7.2
     elif gesture_name == 'imagination':
         return 4.6
     elif gesture_name == 'init':
         return 0.4
     elif gesture_name == 'hand_circle':
-        return 3.8
+        return 5.4
     elif gesture_name == 'look_at_hands':
         return 7.6
     elif gesture_name == 'raise_up':
@@ -54,8 +54,8 @@ def get_gesture_length(gesture_name):
         return 1.0
     elif gesture_name == 'power_up':
         return 2.0
-    elif gesture_name == 'blink_lights':
-        return 1.5
+    elif gesture_name == 'blink_eyes_blue':
+        return 3.0
     elif gesture_name == 'scan':
         return 3.3
     elif gesture_name == 'no':
@@ -64,6 +64,28 @@ def get_gesture_length(gesture_name):
         return 2.0
     elif gesture_name == 'nudge':
         return 2.0
+    elif gesture_name == 'set_eyes_blue':
+        return 0.2
+    elif gesture_name == 'set_eyes_red':
+        return 0.2
+    elif gesture_name == 'set_eyes_green':
+        return 0.2
+    elif gesture_name == 'set_eyes_yellow':
+        return 0.2
+    elif gesture_name == 'set_eyes_white':
+        return 0.2
+    elif gesture_name == 'heck_no':
+        return 2.7  #GUESSED
+    elif gesture_name == 'wings':
+        return 3.7  #GEUSSED
+    elif gesture_name == 'hold_chest':
+        return 2.6
+    elif gesture_name == 'lap_pat':
+        return 3.2
+    elif gesture_name == 'arms_out':
+        return 3.2
+    elif gesture_name == 'receive':
+        return 2.8
     else:
         return 0.0
 
@@ -109,8 +131,8 @@ def get_behavior_name(gesture):
         return "movement-2e59ad/what"
     elif gesture == "power_up":
         return "movement-2e59ad/power_up"
-    elif gesture == "blink_lights":
-        return "movement-2e59ad/blink_lights"
+    elif gesture == "blink_eyes_blue":
+        return "movement-2e59ad/blink_eyes_blue"
     elif gesture == 'scan':
         return "movement-2e59ad/scan"
     elif gesture == 'no':
@@ -119,6 +141,28 @@ def get_behavior_name(gesture):
         return "movement-2e59ad/beep_boop"
     elif gesture == 'nudge':
         return "movement-2e59ad/nudge"
+    elif gesture == 'set_eyes_blue':
+        return "movement-2e59ad/set_eyes_blue"
+    elif gesture == 'set_eyes_green':
+        return "movement-2e59ad/set_eyes_green"
+    elif gesture == 'set_eyes_red':
+        return "movement-2e59ad/set_eyes_red"
+    elif gesture == 'set_eyes_yellow':
+        return "movement-2e59ad/set_eyes_yellow"
+    elif gesture == 'set_eyes_white':
+        return "movement-2e59ad/set_eyes_white"
+    elif gesture == 'heck_no':
+        return "animations/Stand/Gestures/No_3"
+    elif gesture == 'wings':
+        return "animations/Stand/Gestures/Wings_4"
+    elif gesture == 'hold_chest':
+        return "movement-2e59ad/hold_chest"
+    elif gesture == 'lap_pat':
+        return "movement-2e59ad/lap_pat"
+    elif gesture == 'arms_out':
+        return "movement-2e59ad/arms_out"
+    elif gesture == 'receive':
+        return "movement-2e59ad/receive"
     else:
         return "movement-2e59ad/init"
 
@@ -156,34 +200,53 @@ def get_voice_name(voice):
         return "tts_models/en/ljspeech/glow-tts"
     elif voice == 16:  # AFRICAN MAN                     BAD
         return "tts_models/yor/openbible/vits"
+    elif voice == 90 or voice == 91 or voice == 92 or voice == 93 or voice == 94 or voice == 95 or voice == 94 or voice == 95 or voice == 96 or voice == 97 or voice == 98 or voice == 99: # MULTI LINGUAL
+        return "tts_models/multilingual/multi-dataset/xtts_v2"
 
-        # elif voice == 17:     #BROKEN use_phonemes
-        #     return "vocoder_models/en/ljspeech/multiband-melgan"
-        # elif voice == 18:     #BROKEN use_phonemes
-        #     return "vocoder_models/en/ljspeech/univnet"
-        # elif voice == 19:     #BROKEN use_phonemes
-        #     return "vocoder_models/en/blizzard2013/hifigan_v2"
-        # elif voice == 20:     #BROKEN use_phonemes
-        #     return "vocoder_models/en/vctk/hifigan_v2"
-        # elif voice == 21:     #BROKEN use_phonemes
-        #     return "vocoder_models/en/sam/hifigan_v2"
-        # elif voice == 9:      #STUPID
-        #     return "tts_models/en/vctk/fast_pitch"
-        # elif voice == 7:           #BROKEN
-        #     return "tts_models/en/multi-dataset/tortoise-v2"
-        # elif voice == "bark":         #BROKEN
-        #     return "tts_models/multilingual/multi-dataset/bark"
-
-    # 14: tts_models / en / ljspeech / speedy - speech
-    # 16: tts_models / en / ljspeech / vits
-    # 17: tts_models / en / ljspeech / vits - -neon
-    # 18: tts_models / en / ljspeech / fast_pitch
-    # 19: tts_models / en / ljspeech / overflow
-    # 20: tts_models / en / ljspeech / neural_hmm
-    # 21: tts_models / en / vctk / vits
-    # 22: tts_models / en / vctk / fast_pitch
-    # 23: tts_models / en / sam / tacotron - DDC
-    # 24: tts_models / en / blizzard2013 / capacitron - t2 - c50
-    # 25: tts_models / en / blizzard2013 / capacitron - t2 - c150_v2
-    # 26: tts_models / en / multi - dataset / tortoise - v2
-    # 32: tts_models / uk / mai / glow - tts
+def get_voice_language(voice):
+    if voice == 1:         #COMMON LADY                 GOOD
+        return None
+    elif voice == 2:       #CLEAR CONFIDENT WOMAN        GOOD
+        return None
+    elif voice == 3:      #SLOW MIXED UNSETTLING        GOOD
+        return None
+    elif voice == 4:     #CLEAR SERIOUS WOMAN           GOOD
+        return None
+    elif voice == 5:     #CLEAR ROBO WOMAN             GOOD
+        return None
+    elif voice == 6:       #OLDER LADY                  GOOD
+        return None
+    elif voice == 7:       #FAST QUIET CREEPY           OK
+        return None
+    elif voice == 8:       #SLOW ROBO OLD LADY          OK
+        return None
+    elif voice == 9:      #OLDER LADY                   OK
+        return None
+    elif voice == 10:      #CLEAR STROKE                 OK
+        return None
+    elif voice == 11:     #CLEAR HICCUP WOMAN           OK
+        return None
+    elif voice == 12:     #SLOW STUTTER WOMAN           OK
+        return None
+    elif voice == 13:     #CLEAR BAD PRONOUNCE WOMAN    OK
+        return None
+    elif voice == 14:  # WOBBLE WOMAN                   BAD
+        return None
+    elif voice == 15:  # HALF POSSESSED WOMAN           BAD
+        return None
+    elif voice == 16:  # AFRICAN MAN                     BAD
+        return None
+    elif voice == 90: # MULTI LINGUAL   english
+        return "en"
+    elif voice == 91: # MULTI LINGUAL   spanish
+        return "es"
+    elif voice == 92: # MULTI LINGUAL   french
+        return "fr"
+    elif voice == 93: # MULTI LINGUAL   Hindi
+        return "hi"
+    elif voice == 94: # MULTI LINGUAL    Chinese
+        return "zh-cn"
+    elif voice == 95: # MULTI LINGUAL    Sweedish
+        return ""
+    elif voice == 96: # MULTI LINGUAL    German
+        return "de"

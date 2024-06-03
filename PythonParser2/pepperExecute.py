@@ -139,7 +139,7 @@ def main(session):
 
             # if current row is a voice file, play sound
             if row[1].find('.wav') != -1:
-                behavior_service.runBehavior(get_behavior_name('init'), _async=False)
+                # behavior_service.runBehavior(get_behavior_name('init'), _async=False)
                 # find target .wav file
                 file_name = '../outputs/' + row[1]
                 # plays the file in newer python version (for library reason)
@@ -160,7 +160,8 @@ if __name__ == '__main__':
     try:
         session.connect("tcp://" + PEPPER_IP + ":" + str(PEPPER_PORT))
     except RuntimeError:
-        print ("Can't connect to Naoqi at ip \"" + PEPPER_IP + "\" on port " + str(PEPPER_PORT) +".\n"
+        print ("Can't connect to Naoqi at ip \"" + PEPPER_IP +
+               "\" on port " + str(PEPPER_PORT) +".\n"
                "Please check your script arguments. Run with -h option for help.")
         sys.exit(1)
     main(session)

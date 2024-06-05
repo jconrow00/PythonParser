@@ -116,6 +116,12 @@ def main(session):
     behavior_service = session.service("ALBehaviorManager")
     audio_player_service = session.service("ALAudioPlayer")
 
+    # Start background audio
+    if BACKGROUND_SOUD != None:
+        call_python_version("3.9", "playFile", "play", [BACKGRDOUND_SOUND, False])
+
+    time.sleep(1)
+
     # Sets runtime unix time reference
     init_time = time.time()
     # Open commandFile.csv to read commands line by line

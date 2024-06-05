@@ -5,7 +5,9 @@ PEPPER_PORT = 9559
 # PEPPER_IP = 'localhost'
 # PEPPER_PORT = 33361
 
-INPUT_FILE = '../inputs/MultiMeditationHindi.txt'
+BACKGROUND_SOUND = '../inputs/celestial-atmo-11min 1.mp3'
+# BACKGROUND_SOUND = None   # use this value if no background sound is needed
+INPUT_FILE = '../inputs/MutliMeditationMASTER.txt'
 # SPEAKER_WAV = None        # use this value if no multi-lingual voice is used
 SPEAKER_WAV = '../inputs/female.wav'
 

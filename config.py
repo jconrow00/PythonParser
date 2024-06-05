@@ -5,7 +5,7 @@ PEPPER_PORT = 9559
 # PEPPER_IP = 'localhost'
 # PEPPER_PORT = 33361
 
-INPUT_FILE = '../inputs/MultiMeditationEnglish.txt'
+INPUT_FILE = '../inputs/MultiMeditationHindi.txt'
 # SPEAKER_WAV = None        # use this value if no multi-lingual voice is used
 SPEAKER_WAV = '../inputs/female.wav'
 

@@ -23,9 +23,9 @@ def get_gesture_length(gesture_name):
     elif gesture_name == 'talk1':
         return 4.4
     elif gesture_name == 'display_left':
-        return 2.0
+        return 3.0
     elif gesture_name == 'display_right':
-        return 2.0
+        return 3.0
     elif gesture_name == 'plane':
         return 7.6
     elif gesture_name == 'imagination':
@@ -51,7 +51,7 @@ def get_gesture_length(gesture_name):
     elif gesture_name == 'head_bobble':
         return 2.8
     elif gesture_name == 'what':
-        return 2.0
+        return 3.8
     elif gesture_name == 'power_up':
         return 2.6
     elif gesture_name == 'blink_eyes_blue':
@@ -85,7 +85,11 @@ def get_gesture_length(gesture_name):
     elif gesture_name == 'arms_out':
         return 3.2
     elif gesture_name == 'receive':
-        return 3.2
+        return 2.6
+    elif gesture_name == 'display_self':
+        return 5.0
+    elif gesture_name == 'cradle':
+        return 3.6
     else:
         return 0.0
 
@@ -163,6 +167,10 @@ def get_behavior_name(gesture):
         return "movement-2e59ad/arms_out"
     elif gesture == 'receive':
         return "movement-2e59ad/receive"
+    elif gesture == 'display_self':
+        return "movement-2e59ad/display_self"
+    elif gesture == 'cradle':
+        return "movement-2e59ad/cradle"
     else:
         return "movement-2e59ad/init"
 

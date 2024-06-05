@@ -117,8 +117,8 @@ def main(session):
     audio_player_service = session.service("ALAudioPlayer")
 
     # Start background audio
-    if BACKGROUND_SOUD != None:
-        call_python_version("3.9", "playFile", "play", [BACKGRDOUND_SOUND, False])
+    if BACKGROUND_SOUND != None:
+        call_python_version("3.9", "playFile", "play", [BACKGROUND_SOUND, False])
 
     time.sleep(1)
 
